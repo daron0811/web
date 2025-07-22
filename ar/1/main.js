@@ -125,10 +125,27 @@ function main() {
   }).then(start).catch(function (err) {
     console.log('INFO in main.js: an error happens ', err);
   });
-
 }
 
+function fadeInMaterial(material, duration = 1000) {
+  const start = performance.now();
+  function animate(time) {
+    const elapsed = time - start;
+    const t = Math.min(elapsed / duration, 1);
+    material.opacity = t;
+    if (t < 1) requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+}
 
+function fadeInElement(el, delay = 0, addFloat = false) {
+  setTimeout(() => {
+    el.classList.add('visible');
+    if (addFloat) {
+      el.classList.add('floating');
+    }
+  }, delay);
+}
 function callbackTrack(detectStatesArg) {
   // console.log('INFO in main.js: callbackTrack called with', detectStatesArg);
   if (_animationMixer) {
@@ -145,9 +162,13 @@ function callbackTrack(detectStatesArg) {
   }
   else {
     if (detectStatesArg.isDetected && _isShowText == true) {
-      trackObj.visible = true;
-      document.getElementById('img1').classList.add('visible');
-      document.getElementById('img2').classList.add('visible');
+      if (!trackObj.visible) {
+        trackObj.visible = true;
+        fadeInMaterial(trackObj.material, 1000);
+
+        // fadeInElement(document.getElementById('img1'), 1000, true); // 淡入後浮動
+        fadeInElement(document.getElementById('img2'), 2000, true); // 再淡入＋浮動
+      }
     }
     else { trackObj.visible = false; }
   }
@@ -188,15 +209,16 @@ function start(three) {
   }
 
   const textureLoader = new THREE.TextureLoader(three.loadingManager);
-  textureLoader.load('imgs/img1.png', function (texture) {
+  textureLoader.load('imgs/001_0.png', function (texture) {
     const planeWidth = 1.5;
     const planeHeight = 1.5;
 
     const planeGeometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
     const planeMaterial = new THREE.MeshBasicMaterial({
       map: texture,
-      transparent: true, // 支援 PNG 透明
+      transparent: true,
       depthWrite: false,
+      opacity: 0 // 預設為透明
     });
 
     const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
@@ -204,7 +226,7 @@ function start(three) {
     planeMesh.frustumCulled = false;
 
     trackObj = planeMesh;
-    trackObj.scale.set(2, 3, 3);
+    trackObj.scale.set(3, 4, 4);
     trackObj.rotation.set(30, 0, 0);
     trackObj.visible = false;
 
@@ -234,6 +256,9 @@ function start(three) {
   //   const animationAction = _animationMixer.clipAction(animationClip);
   //   animationAction.play();
   // });
+
+
+
 
   // tweak position, scale and rotation:
   _three.tracker.scale.multiplyScalar(_settings.scale);

@@ -112,12 +112,34 @@
     }
 
     #img2 {
-      top: 50%;
-      right: 0%;
+      top: 40%;
+      right: 0;
+      width: 90vw;
+      /* 根據畫面寬度縮放，30vw = 30% 螢幕寬度 */
+      height: auto;
+      /* 保持圖片比例 */
     }
 
     .visible {
       opacity: 1;
+    }
+
+    @keyframes floatUpDown {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .floating {
+      animation: floatUpDown 3s ease-in-out infinite;
     }
   </style>
 
@@ -129,9 +151,8 @@
     <div id="introText1" class="intro-text">最適合你的聖誕假期安排是：<br>與親愛的人們，窩在壁爐邊小酌</div>
     <div id="introText2" class="intro-text">伸出手和最愛的人<br>一同舉杯慶祝吧</div>
 
-
     <img id="img1" class="overlay-img" src="imgs/img1.png" />
-    <img id="img2" class="overlay-img" src="imgs/img2.png" />
+    <img id="img2" class="overlay-img" src="imgs/003.gif" />
 
     <!-- Canvas used by the hand tracker and displaying the video -->
     <canvas id='handTrackerCanvas'></canvas>
