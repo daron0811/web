@@ -30,11 +30,13 @@ const _states = {
   busy: 2
 };
 let _state = _states.notLoaded;
-let _isSelfieCam = true;
+let _isSelfieCam = false;
 let _animationMixer = null, _clock = null;
 
 let _isShowText = false;
+let _isDetected = false;
 let trackObj = null;
+let webcamDeviceIndex = 0;
 
 function setFullScreen(cv) {
   cv.width = window.innerWidth;
@@ -80,7 +82,33 @@ function playIntroSequence(onComplete) {
   }, 500); // 預留一點初始時間
 }
 
+function switchDevice() {
+  var devices = [];
+  WEBARROCKSHAND.get_videoDevices(
+    function (vd) {
+      devices = vd;
 
+      if (devices == null) {
+        stopDevice();
+        return;
+      }
+
+      if (devices.length == 0) {
+        stopDevice();
+        return;
+      }
+
+      webcamDeviceIndex++;
+      if (webcamDeviceIndex >= devices.length) {
+        webcamDeviceIndex = 0;
+      }
+
+      videoSettings.deviceId = devices[webcamDeviceIndex].deviceId;
+      WEBARROCKSHAND.update_videoSettings(videoSettings);
+      console.log("Device ID : ", webcamDeviceIndex, " ", devices[webcamDeviceIndex]);
+    }
+  );
+}
 
 // entry point:
 function main() {
@@ -108,6 +136,10 @@ function main() {
       /*'palmWrist',*/ 'palmMiddle', 'palmSide',
       'backTop'
     ],
+    videoSettings: {
+      'deviceId': '',             // not set by default
+      'facingMode': 'environment'
+    },
     poseFilter: PoseFlipFilter.instance({}),
     enableFlipObject: false,
     cameraZoom: 1,
@@ -125,6 +157,45 @@ function main() {
   }).then(start).catch(function (err) {
     console.log('INFO in main.js: an error happens ', err);
   });
+
+  document.getElementById('captureBtn').addEventListener('click', () => {
+    const baseCanvas = document.getElementById('handTrackerCanvas');
+    const arCanvas = document.getElementById('ARCanvas');
+    const snapshotContainer = document.getElementById('snapshotContainer');
+    snapshotContainer.style.opacity = '1';
+    // 建立暫存 canvas
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = baseCanvas.width;
+    tempCanvas.height = baseCanvas.height;
+    const ctx = tempCanvas.getContext('2d');
+
+    // 👉 加入鏡射反轉
+    ctx.save(); // 儲存原本狀態
+    ctx.translate(tempCanvas.width, 0); // 移動到右邊
+    ctx.scale(-1, 1); // 水平翻轉
+
+    // 先畫手勢追蹤的 canvas（背景）
+    ctx.drawImage(baseCanvas, 0, 0);
+
+    // 再畫上 ARCanvas 的畫面
+    ctx.drawImage(arCanvas, 0, 0);
+
+    ctx.restore(); // 還原座標系
+
+    // 匯出圖片
+    const dataURL = tempCanvas.toDataURL('image/png');
+
+    // 顯示預覽
+    const img = new Image();
+    img.src = dataURL;
+    snapshotContainer.innerHTML = '';
+    snapshotContainer.appendChild(img);
+  });
+
+  document.getElementById('switchCamBtn').addEventListener('click', () => {
+    flip_camera();
+  });
+
 }
 
 function fadeInMaterial(material, duration = 1000) {
@@ -146,6 +217,19 @@ function fadeInElement(el, delay = 0, addFloat = false) {
     }
   }, delay);
 }
+
+function fadeOutMaterial(material, duration = 1000) {
+  const start = performance.now();
+  function animate(time) {
+    const elapsed = time - start;
+    const t = Math.min(elapsed / duration, 1);
+    material.opacity = 1 - t;
+    if (t < 1) requestAnimationFrame(animate);
+    else material.visible = false;
+  }
+  requestAnimationFrame(animate);
+}
+
 function callbackTrack(detectStatesArg) {
   // console.log('INFO in main.js: callbackTrack called with', detectStatesArg);
   if (_animationMixer) {
@@ -162,13 +246,46 @@ function callbackTrack(detectStatesArg) {
   }
   else {
     if (detectStatesArg.isDetected && _isShowText == true) {
-      if (!trackObj.visible) {
-        trackObj.visible = true;
-        fadeInMaterial(trackObj.material, 1000);
+      // if (!trackObj.visible) {
+      //   trackObj.visible = true;
+      //   fadeInMaterial(trackObj.material, 1000);
 
-        // fadeInElement(document.getElementById('img1'), 1000, true); // 淡入後浮動
-        fadeInElement(document.getElementById('img2'), 2000, true); // 再淡入＋浮動
+      //   // fadeInElement(document.getElementById('img1'), 1000, true); // 淡入後浮動
+      //   fadeInElement(document.getElementById('img2'), 2000, true); // 再淡入＋浮動
+      // }
+
+      if (!_three.introPlane.visible && _isShowText) {
+        if (_isDetected == false) {
+
+          _isDetected = true;
+          _three.introPlane.visible = true;
+          _three.introMaterial.opacity = 0;
+
+          fadeInMaterial(_three.introMaterial, 1000); // 淡入 intro plane
+
+          // 1 秒後淡出 intro、淡入主圖
+          setTimeout(() => {
+            fadeOutMaterial(_three.introMaterial, 3000);
+
+            setTimeout(() => {
+              _three.introPlane2.visible = true;
+              _three.introMaterial2.opacity = 0;
+              fadeInMaterial(_three.introMaterial2, 500); // 淡入 intro plane
+              setTimeout(() => {
+                fadeOutMaterial(_three.introMaterial2, 500);
+                trackObj.visible = true;
+                trackObj.material.opacity = 0;
+                fadeInMaterial(trackObj.material, 1000);
+              }, 500);
+            }, 500);
+
+          }, 1000);
+        }
       }
+      else {
+        trackObj.visible = true;
+      }
+
     }
     else { trackObj.visible = false; }
   }
@@ -209,7 +326,7 @@ function start(three) {
   }
 
   const textureLoader = new THREE.TextureLoader(three.loadingManager);
-  textureLoader.load('imgs/001_0.png', function (texture) {
+  textureLoader.load('imgs/3.png', function (texture) {
     const planeWidth = 1.5;
     const planeHeight = 1.5;
 
@@ -226,14 +343,72 @@ function start(three) {
     planeMesh.frustumCulled = false;
 
     trackObj = planeMesh;
-    trackObj.scale.set(3, 4, 4);
+
+    trackObj.scale.set(8, 10, 1);
     trackObj.rotation.set(30, 0, 0);
+    trackObj.position.set(3, 0, -5);
     trackObj.visible = false;
 
     _three.tracker.add(planeMesh);
 
     // 將 tracker 加入到 hand tracking 中
     HandTrackerThreeHelper.add_threeObject(_three.tracker);
+  });
+
+  // 第1個 plane
+  textureLoader.load('imgs/1.png', function (texture2) {
+    const planeWidth = 1.5;
+    const planeHeight = 1.5;
+
+    const introGeometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+    const introMaterial = new THREE.MeshBasicMaterial({
+      map: texture2,
+      transparent: true,
+      opacity: 0 // 預設隱藏
+    });
+
+    const introPlane = new THREE.Mesh(introGeometry, introMaterial);
+    introPlane.renderOrder = 998;
+    introPlane.frustumCulled = false;
+
+    introPlane.scale.set(8, 10, 1);
+    introPlane.rotation.set(30, 0, 0);
+    introPlane.position.set(3, 0, -5);
+    introPlane.visible = false;
+
+    _three.tracker.add(introPlane);
+
+    // 存起來讓 callback 可以控制
+    _three.introPlane = introPlane;
+    _three.introMaterial = introMaterial;
+  });
+
+  // 第2個 plane
+  textureLoader.load('imgs/2.png', function (texture2) {
+    const planeWidth = 1.5;
+    const planeHeight = 1.5;
+
+    const introGeometry2 = new THREE.PlaneGeometry(planeWidth, planeHeight);
+    const introMaterial2 = new THREE.MeshBasicMaterial({
+      map: texture2,
+      transparent: true,
+      opacity: 0 // 預設隱藏
+    });
+
+    const introPlane2 = new THREE.Mesh(introGeometry2, introMaterial2);
+    introPlane2.renderOrder = 998;
+    introPlane2.frustumCulled = false;
+
+    introPlane2.scale.set(8, 10, 1);
+    introPlane2.rotation.set(30, 0, 0);
+    introPlane2.position.set(3, 0, -5);
+    introPlane2.visible = false;
+
+    _three.tracker.add(introPlane2);
+
+    // 存起來讓 callback 可以控制
+    _three.introPlane2 = introPlane2;
+    _three.introMaterial2 = introMaterial2;
   });
 
   // load the velociraptor 3D model:
