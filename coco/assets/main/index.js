@@ -1,6 +1,226 @@
-System.register("chunks:///_virtual/main",["./MiniHorse.ts"],(function(){return{setters:[null],execute:function(){}}}));
+System.register("chunks:///_virtual/main", ['./MiniHorse.ts'], function () {
+  return {
+    setters: [null],
+    execute: function () {}
+  };
+});
 
-System.register("chunks:///_virtual/MiniHorse.ts",["./rollupPluginModLoBabelHelpers.js","cc"],(function(e){var t,i,r,n,s,o,a,c,u,l,h,p,f;return{setters:[function(e){t=e.applyDecoratedDescriptor,i=e.inheritsLoose,r=e.initializerDefineProperty,n=e.assertThisInitialized,s=e.asyncToGenerator,o=e.regeneratorRuntime},function(e){a=e.cclegacy,c=e._decorator,u=e.ProgressBar,l=e.Label,h=e.Node,p=e.Component,f=e.sys}],execute:function(){var g,m,d,v,b,y,P,w,L,M,x;a._RF.push({},"45d49rPkZpCUb3+vvEPIhdb","MiniHorse",void 0);var k=c.ccclass,D=c.property;e("MiniHorse",(g=k("MiniHorse"),m=D({type:u}),d=D({type:l}),v=D({type:h}),b=D({type:h,tooltip:"點擊以開始的UI（授權會綁在此按鈕）"}),g((w=t((P=function(e){function t(){for(var t,i=arguments.length,s=new Array(i),o=0;o<i;o++)s[o]=arguments[o];return t=e.call.apply(e,[this].concat(s))||this,r(t,"energyProgress",w,n(t)),r(t,"timerLabel",L,n(t)),r(t,"horse",M,n(t)),r(t,"startPanel",x,n(t)),t.timeLeft=30,t.isPlaying=!1,t.progress=0,t.lastShakeAt=0,t.onDeviceMotion=function(e){if(t.isPlaying){var i=e.accelerationIncludingGravity;if(i){var r=Math.abs(i.x||0)+Math.abs(i.y||0)+Math.abs(i.z||0),n=performance.now();r>18&&n-t.lastShakeAt>60&&(t.lastShakeAt=n,t.updateProgress(t.progress+.02))}}},t}i(t,e);var a=t.prototype;return a.onLoad=function(){this.updateProgress(0),this.timerLabel&&(this.timerLabel.string="30")},a.onClickStart=function(){var e=s(o().mark((function e(){return o().wrap((function(e){for(;;)switch(e.prev=e.next){case 0:return e.next=2,this.enableMotion();case 2:this.startGame();case 3:case"end":return e.stop()}}),e,this)})));return function(){return e.apply(this,arguments)}}(),a.enableMotion=function(){var e=s(o().mark((function e(){var t,i,r;return o().wrap((function(e){for(;;)switch(e.prev=e.next){case 0:if(t=f.isBrowser&&/iPad|iPhone|iPod/.test(navigator.userAgent),i=globalThis.DeviceMotionEvent,r=globalThis.DeviceOrientationEvent,e.prev=3,!t){e.next=11;break}if(!i||"function"!=typeof i.requestPermission){e.next=8;break}return e.next=8,i.requestPermission();case 8:if(!r||"function"!=typeof r.requestPermission){e.next=11;break}return e.next=11,r.requestPermission();case 11:e.next=16;break;case 13:e.prev=13,e.t0=e.catch(3),console.warn("Motion permission request error:",e.t0);case 16:"undefined"!=typeof window&&"ondevicemotion"in window?window.addEventListener("devicemotion",this.onDeviceMotion,!1):console.warn("devicemotion not supported in this environment.");case 17:case"end":return e.stop()}}),e,this,[[3,13]])})));return function(){return e.apply(this,arguments)}}(),a.startGame=function(){this.isPlaying=!0,this.timeLeft=30,this.progress=0,this.updateProgress(0),this.timerLabel&&(this.timerLabel.string="30"),this.startPanel&&(this.startPanel.active=!1)},a.endGame=function(){this.isPlaying=!1,this.startPanel&&(this.startPanel.active=!0),"undefined"!=typeof window&&window.removeEventListener("devicemotion",this.onDeviceMotion)},a.update=function(e){this.isPlaying&&(this.timeLeft-=e,this.timerLabel&&(this.timerLabel.string=Math.max(0,Math.ceil(this.timeLeft)).toString()),this.timeLeft<=0&&this.endGame())},a.updateProgress=function(e){this.progress=Math.max(0,Math.min(1,e)),this.energyProgress&&(this.energyProgress.progress=this.progress),this.progress>=1&&this.endGame()},t}(p)).prototype,"energyProgress",[m],{configurable:!0,enumerable:!0,writable:!0,initializer:function(){return null}}),L=t(P.prototype,"timerLabel",[d],{configurable:!0,enumerable:!0,writable:!0,initializer:function(){return null}}),M=t(P.prototype,"horse",[v],{configurable:!0,enumerable:!0,writable:!0,initializer:function(){return null}}),x=t(P.prototype,"startPanel",[b],{configurable:!0,enumerable:!0,writable:!0,initializer:function(){return null}}),y=P))||y));a._RF.pop()}}}));
+System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, ProgressBar, Label, Node, Component, sys;
+  return {
+    setters: [function (module) {
+      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
+      _inheritsLoose = module.inheritsLoose;
+      _initializerDefineProperty = module.initializerDefineProperty;
+      _assertThisInitialized = module.assertThisInitialized;
+      _asyncToGenerator = module.asyncToGenerator;
+      _regeneratorRuntime = module.regeneratorRuntime;
+    }, function (module) {
+      cclegacy = module.cclegacy;
+      _decorator = module._decorator;
+      ProgressBar = module.ProgressBar;
+      Label = module.Label;
+      Node = module.Node;
+      Component = module.Component;
+      sys = module.sys;
+    }],
+    execute: function () {
+      var _dec, _dec2, _dec3, _dec4, _dec5, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+      cclegacy._RF.push({}, "45d49rPkZpCUb3+vvEPIhdb", "MiniHorse", undefined);
+      var ccclass = _decorator.ccclass,
+        property = _decorator.property;
+      var MiniHorse = exports('MiniHorse', (_dec = ccclass('MiniHorse'), _dec2 = property({
+        type: ProgressBar
+      }), _dec3 = property({
+        type: Label
+      }), _dec4 = property({
+        type: Node
+      }), _dec5 = property({
+        type: Node,
+        tooltip: '點擊以開始的UI（授權會綁在此按鈕）'
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(MiniHorse, _Component);
+        function MiniHorse() {
+          var _this;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+          _initializerDefineProperty(_this, "energyProgress", _descriptor, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "timerLabel", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "horse", _descriptor3, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "startPanel", _descriptor4, _assertThisInitialized(_this));
+          _this.timeLeft = 30;
+          _this.isPlaying = false;
+          _this.progress = 0;
+          _this.lastShakeAt = 0;
+          // 使用箭頭函式綁定 this
+          _this.onDeviceMotion = function (event) {
+            if (!_this.isPlaying) return;
+            var acc = event.accelerationIncludingGravity;
+            if (!acc) return;
+
+            // 基本搖晃強度估算（可依裝置調整閾值）
+            var magnitude = Math.abs(acc.x || 0) + Math.abs(acc.y || 0) + Math.abs(acc.z || 0);
+            var now = performance.now();
+
+            // 以節流方式計數，避免極高頻率造成誤差
+            if (magnitude > 18 && now - _this.lastShakeAt > 60) {
+              _this.lastShakeAt = now;
+              _this.updateProgress(_this.progress + 0.02); // 每次有效搖動推進 2%
+            }
+          };
+
+          return _this;
+        }
+        var _proto = MiniHorse.prototype;
+        _proto.onLoad = function onLoad() {
+          // 初始化 UI
+          this.updateProgress(0);
+          if (this.timerLabel) this.timerLabel.string = '30';
+        };
+        _proto.onClickStart = /*#__PURE__*/function () {
+          var _onClickStart = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return this.enableMotion();
+                case 2:
+                  this.startGame();
+                case 3:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee, this);
+          }));
+          function onClickStart() {
+            return _onClickStart.apply(this, arguments);
+          }
+          return onClickStart;
+        }();
+        _proto.enableMotion = /*#__PURE__*/function () {
+          var _enableMotion = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+            var isIOS, dm, dor;
+            return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+              while (1) switch (_context2.prev = _context2.next) {
+                case 0:
+                  // 必須在 HTTPS + 真機瀏覽器執行
+                  // 1) iOS (Safari 13+) 需要 requestPermission
+                  isIOS = sys.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+                  dm = globalThis.DeviceMotionEvent;
+                  dor = globalThis.DeviceOrientationEvent;
+                  _context2.prev = 3;
+                  if (!isIOS) {
+                    _context2.next = 11;
+                    break;
+                  }
+                  if (!(dm && typeof dm.requestPermission === 'function')) {
+                    _context2.next = 8;
+                    break;
+                  }
+                  _context2.next = 8;
+                  return dm.requestPermission();
+                case 8:
+                  if (!(dor && typeof dor.requestPermission === 'function')) {
+                    _context2.next = 11;
+                    break;
+                  }
+                  _context2.next = 11;
+                  return dor.requestPermission();
+                case 11:
+                  _context2.next = 16;
+                  break;
+                case 13:
+                  _context2.prev = 13;
+                  _context2.t0 = _context2["catch"](3);
+                  console.warn('Motion permission request error:', _context2.t0);
+                case 16:
+                  // 綁定事件（若不支援則給出警告）
+                  if (typeof window !== 'undefined' && 'ondevicemotion' in window) {
+                    window.addEventListener('devicemotion', this.onDeviceMotion, false);
+                  } else {
+                    console.warn('devicemotion not supported in this environment.');
+                  }
+                case 17:
+                case "end":
+                  return _context2.stop();
+              }
+            }, _callee2, this, [[3, 13]]);
+          }));
+          function enableMotion() {
+            return _enableMotion.apply(this, arguments);
+          }
+          return enableMotion;
+        }();
+        _proto.startGame = function startGame() {
+          this.isPlaying = true;
+          this.timeLeft = 30;
+          this.progress = 0;
+          this.updateProgress(0);
+          if (this.timerLabel) this.timerLabel.string = '30';
+          if (this.startPanel) this.startPanel.active = false;
+        };
+        _proto.endGame = function endGame() {
+          this.isPlaying = false;
+          // 收尾：可在此彈出成功/失敗面板
+          if (this.startPanel) this.startPanel.active = true;
+          // 移除監聽，避免重複疊加
+          if (typeof window !== 'undefined') {
+            window.removeEventListener('devicemotion', this.onDeviceMotion);
+          }
+        };
+        _proto.update = function update(dt) {
+          if (!this.isPlaying) return;
+          this.timeLeft -= dt;
+          if (this.timerLabel) {
+            this.timerLabel.string = Math.max(0, Math.ceil(this.timeLeft)).toString();
+          }
+          if (this.timeLeft <= 0) {
+            this.endGame();
+          }
+        };
+        _proto.updateProgress = function updateProgress(v) {
+          this.progress = Math.max(0, Math.min(1, v));
+          if (this.energyProgress) this.energyProgress.progress = this.progress;
+          if (this.progress >= 1) {
+            this.endGame();
+          }
+        };
+        return MiniHorse;
+      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "energyProgress", [_dec2], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "timerLabel", [_dec3], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "horse", [_dec4], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "startPanel", [_dec5], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      })), _class2)) || _class));
+      cclegacy._RF.pop();
+    }
+  };
+});
 
 (function(r) {
   r('virtual:///prerequisite-imports/main', 'chunks:///_virtual/main'); 

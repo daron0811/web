@@ -1,1 +1,74 @@
-{"importBase":"import","nativeBase":"native","name":"main","deps":[],"uuids":["0bc540c93","0d986ff32","20g1ukYUVPvKWKBRznAKo+","feK54Y0gBKoKVxcAbUnkTb","20g1ukYUVPvKWKBRznAKo+@6c48a","20g1ukYUVPvKWKBRznAKo+@f9941","4eYLbFinNJarAfbq7btPbK","4eYLbFinNJarAfbq7btPbK@6c48a","4eYLbFinNJarAfbq7btPbK@f9941","54TknWPwVPqJqeCR+Y/Czo","54TknWPwVPqJqeCR+Y/Czo@6c48a","54TknWPwVPqJqeCR+Y/Czo@f9941","95EkngnxZFbYuFpsqVTaFr","95EkngnxZFbYuFpsqVTaFr@6c48a","95EkngnxZFbYuFpsqVTaFr@f9941","a38YDhYYxJuraLPboRbuGC","a38YDhYYxJuraLPboRbuGC@6c48a","a38YDhYYxJuraLPboRbuGC@f9941","baIUdvKGZPgZxNbjWTFuRI","fdjsU2o1RKF5x0TziDw3jI"],"paths":{"3":["db:/assets/Scenes/01_miniHorse",0,1],"18":["db:/internal/physics/default-physics-material",2,1],"19":["db:/internal/default_renderpipeline/builtin-forward",1,1]},"scenes":{"db://assets/Scenes/01_miniHorse.scene":3},"packs":{"0bc540c93":[7,10,4,13,16],"0d986ff32":[5,8,11,14,17,3]},"versions":{"import":[],"native":[]},"redirect":[],"debug":false,"extensionMap":{},"hasPreloadScript":true,"dependencyRelationships":{},"types":["cc.SceneAsset","cc.RenderPipeline","cc.PhysicsMaterial"]}
+{
+    "importBase": "import",
+    "nativeBase": "native",
+    "name": "main",
+    "deps": [],
+    "uuids": [
+        "0bc540c93",
+        "0d986ff32",
+        "20835ba4-6145-4fbc-a58a-051ce700aa3e",
+        "20835ba4-6145-4fbc-a58a-051ce700aa3e@6c48a",
+        "20835ba4-6145-4fbc-a58a-051ce700aa3e@f9941",
+        "4e60b6c5-8a73-496a-b01f-6eaedbb4f6ca",
+        "4e60b6c5-8a73-496a-b01f-6eaedbb4f6ca@6c48a",
+        "4e60b6c5-8a73-496a-b01f-6eaedbb4f6ca@f9941",
+        "544e49d6-3f05-4fa8-9a9e-091f98fc2ce8",
+        "544e49d6-3f05-4fa8-9a9e-091f98fc2ce8@6c48a",
+        "544e49d6-3f05-4fa8-9a9e-091f98fc2ce8@f9941",
+        "951249e0-9f16-456d-8b85-a6ca954da16b",
+        "951249e0-9f16-456d-8b85-a6ca954da16b@6c48a",
+        "951249e0-9f16-456d-8b85-a6ca954da16b@f9941",
+        "a3f180e1-618c-49ba-b68b-3dba116ee182",
+        "a3f180e1-618c-49ba-b68b-3dba116ee182@6c48a",
+        "a3f180e1-618c-49ba-b68b-3dba116ee182@f9941",
+        "ba21476f-2866-4f81-9c4d-6e359316e448",
+        "fd8ec536-a354-4a17-9c74-4f3883c378c8",
+        "fe2b9e18-d200-4aa0-a571-7006d49e44db"
+    ],
+    "paths": {
+        "fe2b9e18-d200-4aa0-a571-7006d49e44db": [
+            "db:/assets/Scenes/01_miniHorse",
+            "cc.SceneAsset",
+            1
+        ],
+        "fd8ec536-a354-4a17-9c74-4f3883c378c8": [
+            "db:/internal/default_renderpipeline/builtin-forward",
+            "cc.RenderPipeline",
+            1
+        ],
+        "ba21476f-2866-4f81-9c4d-6e359316e448": [
+            "db:/internal/physics/default-physics-material",
+            "cc.PhysicsMaterial",
+            1
+        ]
+    },
+    "scenes": {
+        "db://assets/Scenes/01_miniHorse.scene": "fe2b9e18-d200-4aa0-a571-7006d49e44db"
+    },
+    "packs": {
+        "0bc540c93": [
+            "4e60b6c5-8a73-496a-b01f-6eaedbb4f6ca@6c48a",
+            "544e49d6-3f05-4fa8-9a9e-091f98fc2ce8@6c48a",
+            "20835ba4-6145-4fbc-a58a-051ce700aa3e@6c48a",
+            "951249e0-9f16-456d-8b85-a6ca954da16b@6c48a",
+            "a3f180e1-618c-49ba-b68b-3dba116ee182@6c48a"
+        ],
+        "0d986ff32": [
+            "20835ba4-6145-4fbc-a58a-051ce700aa3e@f9941",
+            "4e60b6c5-8a73-496a-b01f-6eaedbb4f6ca@f9941",
+            "544e49d6-3f05-4fa8-9a9e-091f98fc2ce8@f9941",
+            "951249e0-9f16-456d-8b85-a6ca954da16b@f9941",
+            "a3f180e1-618c-49ba-b68b-3dba116ee182@f9941",
+            "fe2b9e18-d200-4aa0-a571-7006d49e44db"
+        ]
+    },
+    "versions": {
+        "import": [],
+        "native": []
+    },
+    "redirect": [],
+    "debug": true,
+    "extensionMap": {},
+    "hasPreloadScript": true,
+    "dependencyRelationships": {}
+}
