@@ -79,7 +79,7 @@ System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHel
         _proto.onLoad = function onLoad() {
           // 初始化 UI（不要自動 start）
           this.updateProgress(0);
-          if (this.timerLabel) this.timerLabel.string = '30';
+          if (this.timerLabel) this.timerLabel.string = " 倒數秒數: " + '30';
 
           // 顯示開始面板，等待使用者點擊
           if (this.startPanel) this.startPanel.active = true;
@@ -179,7 +179,7 @@ System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHel
           this.isPlaying = true;
           this.timeLeft = 30;
           this.updateProgress(0);
-          if (this.timerLabel) this.timerLabel.string = '30';
+          if (this.timerLabel) this.timerLabel.string = " 倒數秒數: " + '30';
           if (this.startPanel) this.startPanel.active = false;
         };
         _proto.endGame = function endGame() {
@@ -193,7 +193,7 @@ System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHel
           if (!this.isPlaying) return;
           this.timeLeft -= dt;
           if (this.timerLabel) {
-            this.timerLabel.string = Math.max(0, Math.ceil(this.timeLeft)).toString();
+            this.timerLabel.string = " 倒數秒數: " + Math.max(0, Math.ceil(this.timeLeft)).toString();
           }
           if (this.timeLeft <= 0) {
             this.endGame();
