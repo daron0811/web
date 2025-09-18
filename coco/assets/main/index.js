@@ -25,7 +25,7 @@ System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHel
       sys = module.sys;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
       cclegacy._RF.push({}, "45d49rPkZpCUb3+vvEPIhdb", "MiniHorse", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
@@ -34,8 +34,10 @@ System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHel
       }), _dec3 = property({
         type: Label
       }), _dec4 = property({
-        type: Node
+        type: Label
       }), _dec5 = property({
+        type: Node
+      }), _dec6 = property({
         type: Node,
         tooltip: '點擊以開始的UI（授權會綁在此按鈕）'
       }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
@@ -48,8 +50,9 @@ System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHel
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
           _initializerDefineProperty(_this, "energyProgress", _descriptor, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "timerLabel", _descriptor2, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "horse", _descriptor3, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "startPanel", _descriptor4, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "logLable", _descriptor3, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "horse", _descriptor4, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "startPanel", _descriptor5, _assertThisInitialized(_this));
           _this.timeLeft = 30;
           _this.isPlaying = false;
           _this.progress = 0;
@@ -113,41 +116,46 @@ System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHel
                   dor = globalThis.DeviceOrientationEvent;
                   _context2.prev = 3;
                   if (!isIOS) {
-                    _context2.next = 11;
+                    _context2.next = 13;
                     break;
                   }
                   if (!(dm && typeof dm.requestPermission === 'function')) {
-                    _context2.next = 8;
+                    _context2.next = 9;
                     break;
                   }
-                  _context2.next = 8;
+                  this.logLable.string = "isIOS requestPermission";
+                  _context2.next = 9;
                   return dm.requestPermission();
-                case 8:
+                case 9:
                   if (!(dor && typeof dor.requestPermission === 'function')) {
-                    _context2.next = 11;
+                    _context2.next = 13;
                     break;
                   }
-                  _context2.next = 11;
+                  this.logLable.string = "isIOS requestPermission";
+                  _context2.next = 13;
                   return dor.requestPermission();
-                case 11:
-                  _context2.next = 16;
-                  break;
                 case 13:
-                  _context2.prev = 13;
+                  _context2.next = 19;
+                  break;
+                case 15:
+                  _context2.prev = 15;
                   _context2.t0 = _context2["catch"](3);
+                  this.logLable.string = "Motion permission request error";
                   console.warn('Motion permission request error:', _context2.t0);
-                case 16:
+                case 19:
                   // 綁定事件（若不支援則給出警告）
                   if (typeof window !== 'undefined' && 'ondevicemotion' in window) {
+                    this.logLable.string = "devicemotion !!";
                     window.addEventListener('devicemotion', this.onDeviceMotion, false);
                   } else {
                     console.warn('devicemotion not supported in this environment.');
+                    this.logLable.string = "devicemotion not supported in this environment.";
                   }
-                case 17:
+                case 20:
                 case "end":
                   return _context2.stop();
               }
-            }, _callee2, this, [[3, 13]]);
+            }, _callee2, this, [[3, 15]]);
           }));
           function enableMotion() {
             return _enableMotion.apply(this, arguments);
@@ -203,14 +211,21 @@ System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHel
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "horse", [_dec4], {
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "logLable", [_dec4], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "startPanel", [_dec5], {
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "horse", [_dec5], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "startPanel", [_dec6], {
         configurable: true,
         enumerable: true,
         writable: true,
