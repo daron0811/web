@@ -78,6 +78,7 @@ System.register("chunks:///_virtual/MiniHorse.ts", ['./rollupPluginModLoBabelHel
           // 初始化 UI
           this.updateProgress(0);
           if (this.timerLabel) this.timerLabel.string = '30';
+          this.onClickStart();
         };
         _proto.onClickStart = /*#__PURE__*/function () {
           var _onClickStart = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {

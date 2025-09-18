@@ -1,5 +1,5 @@
 System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './builtin-pipeline-types.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _createClass, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Camera, CCBoolean, CCInteger, CCFloat, Material, Texture2D, rendering, Component, fillRequiredPipelineSettings, makePipelineSettings;
+  var _applyDecoratedDescriptor, _inheritsLoose, _createClass, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Camera, CCBoolean, CCInteger, CCFloat, Material, Texture2D, rendering, Component, BloomType, fillRequiredPipelineSettings, makePipelineSettings;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
@@ -19,11 +19,12 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
       rendering = module.rendering;
       Component = module.Component;
     }, function (module) {
+      BloomType = module.BloomType;
       fillRequiredPipelineSettings = module.fillRequiredPipelineSettings;
       makePipelineSettings = module.makePipelineSettings;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _class, _class2, _descriptor, _descriptor2;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _class, _class2, _descriptor, _descriptor2;
       cclegacy._RF.push({}, "de1c2EHcMhAIYRZY5nyTQHG", "builtin-pipeline-settings", undefined);
       var ccclass = _decorator.ccclass,
         disallowMultiple = _decorator.disallowMultiple,
@@ -72,14 +73,27 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
           style: 'section'
         },
         type: CCBoolean
-      }), _dec11 = property({
+      }), _dec11 = type(BloomType), _dec12 = property({
+        group: {
+          id: 'Bloom',
+          name: 'Bloom (PostProcessing)',
+          style: 'section'
+        }
+      }), _dec13 = property({
         group: {
           id: 'Bloom',
           name: 'Bloom (PostProcessing)',
           style: 'section'
         },
         type: Material
-      }), _dec12 = property({
+      }), _dec14 = property({
+        group: {
+          id: 'Bloom',
+          name: 'Bloom (PostProcessing)',
+          style: 'section'
+        },
+        type: Material
+      }), _dec15 = property({
         tooltip: 'i18n:bloom.enableAlphaMask',
         group: {
           id: 'Bloom',
@@ -87,7 +101,7 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
           style: 'section'
         },
         type: CCBoolean
-      }), _dec13 = property({
+      }), _dec16 = property({
         tooltip: 'i18n:bloom.iterations',
         group: {
           id: 'Bloom',
@@ -97,7 +111,7 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
         type: CCInteger,
         range: [1, 6, 1],
         slide: true
-      }), _dec14 = property({
+      }), _dec17 = property({
         tooltip: 'i18n:bloom.threshold',
         group: {
           id: 'Bloom',
@@ -106,21 +120,27 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
         },
         type: CCFloat,
         min: 0
-      }), _dec15 = property({
+      }), _dec18 = type(CCFloat), _dec19 = property({
+        group: {
+          id: 'Bloom',
+          name: 'Bloom (PostProcessing)',
+          style: 'section'
+        }
+      }), _dec20 = property({
         group: {
           id: 'Color Grading',
           name: 'ColorGrading (LDR) (PostProcessing)',
           style: 'section'
         },
         type: CCBoolean
-      }), _dec16 = property({
+      }), _dec21 = property({
         group: {
           id: 'Color Grading',
           name: 'ColorGrading (LDR) (PostProcessing)',
           style: 'section'
         },
         type: Material
-      }), _dec17 = property({
+      }), _dec22 = property({
         tooltip: 'i18n:color_grading.contribute',
         group: {
           id: 'Color Grading',
@@ -130,7 +150,7 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
         type: CCFloat,
         range: [0, 1, 0.01],
         slide: true
-      }), _dec18 = property({
+      }), _dec23 = property({
         tooltip: 'i18n:color_grading.originalMap',
         group: {
           id: 'Color Grading',
@@ -138,35 +158,35 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
           style: 'section'
         },
         type: Texture2D
-      }), _dec19 = property({
+      }), _dec24 = property({
         group: {
           id: 'FXAA',
           name: 'Fast Approximate Anti-Aliasing (PostProcessing)',
           style: 'section'
         },
         type: CCBoolean
-      }), _dec20 = property({
+      }), _dec25 = property({
         group: {
           id: 'FXAA',
           name: 'Fast Approximate Anti-Aliasing (PostProcessing)',
           style: 'section'
         },
         type: Material
-      }), _dec21 = property({
+      }), _dec26 = property({
         group: {
           id: 'FSR',
           name: 'FidelityFX Super Resolution',
           style: 'section'
         },
         type: CCBoolean
-      }), _dec22 = property({
+      }), _dec27 = property({
         group: {
           id: 'FSR',
           name: 'FidelityFX Super Resolution',
           style: 'section'
         },
         type: Material
-      }), _dec23 = property({
+      }), _dec28 = property({
         group: {
           id: 'FSR',
           name: 'FidelityFX Super Resolution',
@@ -175,7 +195,7 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
         type: CCFloat,
         range: [0, 1, 0.01],
         slide: true
-      }), _dec24 = property({
+      }), _dec29 = property({
         group: {
           id: 'ToneMapping',
           name: 'ToneMapping',
@@ -212,7 +232,9 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
         _proto.onDisable = function onDisable() {
           var cameraComponent = this.getComponent(Camera);
           var camera = cameraComponent.camera;
-          camera.pipelineSettings = null;
+          if (camera) {
+            camera.pipelineSettings = null;
+          }
         };
         _proto._tryEnableEditorPreview = function _tryEnableEditorPreview() {
           if (rendering === undefined) {
@@ -296,15 +318,34 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
             this._settings.bloom.enabled = value;
           }
         }, {
-          key: "bloomMaterial",
+          key: "bloomType",
           get: function get() {
-            return this._settings.bloom.material;
+            return this._settings.bloom.type;
           },
           set: function set(value) {
-            if (this._settings.bloom.material === value) {
+            this._settings.bloom.type = value;
+          }
+        }, {
+          key: "kawaseBloomMaterial",
+          get: function get() {
+            return this._settings.bloom.kawaseFilterMaterial;
+          },
+          set: function set(value) {
+            if (this._settings.bloom.kawaseFilterMaterial === value) {
               return;
             }
-            this._settings.bloom.material = value;
+            this._settings.bloom.kawaseFilterMaterial = value;
+          }
+        }, {
+          key: "mipmapBloomMaterial",
+          get: function get() {
+            return this._settings.bloom.mipmapFilterMaterial;
+          },
+          set: function set(value) {
+            if (this._settings.bloom.mipmapFilterMaterial === value) {
+              return;
+            }
+            this._settings.bloom.mipmapFilterMaterial = value;
           }
         }, {
           key: "bloomEnableAlphaMask",
@@ -458,18 +499,19 @@ System.register("chunks:///_virtual/builtin-pipeline-settings.ts", ['./rollupPlu
         initializer: function initializer() {
           return false;
         }
-      }), _applyDecoratedDescriptor(_class2.prototype, "editorPreview", [_dec5], Object.getOwnPropertyDescriptor(_class2.prototype, "editorPreview"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "MsaaEnable", [_dec6], Object.getOwnPropertyDescriptor(_class2.prototype, "MsaaEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "msaaSampleCount", [_dec7], Object.getOwnPropertyDescriptor(_class2.prototype, "msaaSampleCount"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "shadingScaleEnable", [_dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "shadingScaleEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "shadingScale", [_dec9], Object.getOwnPropertyDescriptor(_class2.prototype, "shadingScale"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomEnable", [_dec10], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomMaterial", [_dec11], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomMaterial"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomEnableAlphaMask", [_dec12], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomEnableAlphaMask"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomIterations", [_dec13], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomIterations"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomThreshold", [_dec14], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomThreshold"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "colorGradingEnable", [_dec15], Object.getOwnPropertyDescriptor(_class2.prototype, "colorGradingEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "colorGradingMaterial", [_dec16], Object.getOwnPropertyDescriptor(_class2.prototype, "colorGradingMaterial"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "colorGradingContribute", [_dec17], Object.getOwnPropertyDescriptor(_class2.prototype, "colorGradingContribute"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "colorGradingMap", [_dec18], Object.getOwnPropertyDescriptor(_class2.prototype, "colorGradingMap"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fxaaEnable", [_dec19], Object.getOwnPropertyDescriptor(_class2.prototype, "fxaaEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fxaaMaterial", [_dec20], Object.getOwnPropertyDescriptor(_class2.prototype, "fxaaMaterial"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fsrEnable", [_dec21], Object.getOwnPropertyDescriptor(_class2.prototype, "fsrEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fsrMaterial", [_dec22], Object.getOwnPropertyDescriptor(_class2.prototype, "fsrMaterial"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fsrSharpness", [_dec23], Object.getOwnPropertyDescriptor(_class2.prototype, "fsrSharpness"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "toneMappingMaterial", [_dec24], Object.getOwnPropertyDescriptor(_class2.prototype, "toneMappingMaterial"), _class2.prototype)), _class2)) || _class) || _class) || _class) || _class) || _class));
+      }), _applyDecoratedDescriptor(_class2.prototype, "editorPreview", [_dec5], Object.getOwnPropertyDescriptor(_class2.prototype, "editorPreview"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "MsaaEnable", [_dec6], Object.getOwnPropertyDescriptor(_class2.prototype, "MsaaEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "msaaSampleCount", [_dec7], Object.getOwnPropertyDescriptor(_class2.prototype, "msaaSampleCount"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "shadingScaleEnable", [_dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "shadingScaleEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "shadingScale", [_dec9], Object.getOwnPropertyDescriptor(_class2.prototype, "shadingScale"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomEnable", [_dec10], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomType", [_dec11, _dec12], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomType"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "kawaseBloomMaterial", [_dec13], Object.getOwnPropertyDescriptor(_class2.prototype, "kawaseBloomMaterial"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "mipmapBloomMaterial", [_dec14], Object.getOwnPropertyDescriptor(_class2.prototype, "mipmapBloomMaterial"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomEnableAlphaMask", [_dec15], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomEnableAlphaMask"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomIterations", [_dec16], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomIterations"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomThreshold", [_dec17], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomThreshold"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "bloomIntensity", [_dec18, _dec19], Object.getOwnPropertyDescriptor(_class2.prototype, "bloomIntensity"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "colorGradingEnable", [_dec20], Object.getOwnPropertyDescriptor(_class2.prototype, "colorGradingEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "colorGradingMaterial", [_dec21], Object.getOwnPropertyDescriptor(_class2.prototype, "colorGradingMaterial"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "colorGradingContribute", [_dec22], Object.getOwnPropertyDescriptor(_class2.prototype, "colorGradingContribute"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "colorGradingMap", [_dec23], Object.getOwnPropertyDescriptor(_class2.prototype, "colorGradingMap"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fxaaEnable", [_dec24], Object.getOwnPropertyDescriptor(_class2.prototype, "fxaaEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fxaaMaterial", [_dec25], Object.getOwnPropertyDescriptor(_class2.prototype, "fxaaMaterial"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fsrEnable", [_dec26], Object.getOwnPropertyDescriptor(_class2.prototype, "fsrEnable"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fsrMaterial", [_dec27], Object.getOwnPropertyDescriptor(_class2.prototype, "fsrMaterial"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "fsrSharpness", [_dec28], Object.getOwnPropertyDescriptor(_class2.prototype, "fsrSharpness"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "toneMappingMaterial", [_dec29], Object.getOwnPropertyDescriptor(_class2.prototype, "toneMappingMaterial"), _class2.prototype)), _class2)) || _class) || _class) || _class) || _class) || _class));
       cclegacy._RF.pop();
     }
   };
 });
 
 System.register("chunks:///_virtual/builtin-pipeline-types.ts", ['cc'], function (exports) {
-  var cclegacy, gfx;
+  var cclegacy, gfx, ccenum;
   return {
     setters: [function (module) {
       cclegacy = module.cclegacy;
       gfx = module.gfx;
+      ccenum = module.ccenum;
     }],
     execute: function () {
       exports({
@@ -536,22 +578,40 @@ System.register("chunks:///_virtual/builtin-pipeline-types.ts", ['cc'], function
           value.needBlur = false;
         }
       }
+      var BloomType = exports('BloomType', /*#__PURE__*/function (BloomType) {
+        BloomType[BloomType["KawaseDualFilter"] = 0] = "KawaseDualFilter";
+        BloomType[BloomType["MipmapFilter"] = 1] = "MipmapFilter";
+        return BloomType;
+      }({}));
+      ccenum(BloomType);
       function makeBloom() {
         return {
           enabled: false,
+          type: BloomType.KawaseDualFilter,
           material: null,
+          kawaseFilterMaterial: null,
+          mipmapFilterMaterial: null,
           enableAlphaMask: false,
           iterations: 3,
           threshold: 0.8,
-          intensity: 2.3
+          intensity: 1
         };
       }
       function fillRequiredBloom(value) {
         if (value.enabled === undefined) {
           value.enabled = false;
         }
+        if (value.type === undefined) {
+          value.type = BloomType.KawaseDualFilter;
+        }
         if (value.material === undefined) {
           value.material = null;
+        }
+        if (value.kawaseFilterMaterial === undefined) {
+          value.kawaseFilterMaterial = value.material || null;
+        }
+        if (value.mipmapFilterMaterial === undefined) {
+          value.mipmapFilterMaterial = null;
         }
         if (value.enableAlphaMask === undefined) {
           value.enableAlphaMask = false;
@@ -563,7 +623,7 @@ System.register("chunks:///_virtual/builtin-pipeline-types.ts", ['cc'], function
           value.threshold = 0.8;
         }
         if (value.intensity === undefined) {
-          value.intensity = 2.3;
+          value.intensity = 1;
         }
       }
       function makeColorGrading() {
@@ -686,7 +746,7 @@ System.register("chunks:///_virtual/builtin-pipeline-types.ts", ['cc'], function
 });
 
 System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './builtin-pipeline-types.ts'], function (exports) {
-  var _createForOfIteratorHelperLoose, cclegacy, geometry, gfx, renderer, Vec2, Vec4, rendering, assert, warn, clamp, Vec3, Material, Layers, PipelineEventType, sys, pipeline, makePipelineSettings;
+  var _createForOfIteratorHelperLoose, cclegacy, geometry, gfx, renderer, Vec2, Vec4, rendering, assert, warn, clamp, Vec3, Material, Layers, PipelineEventType, sys, pipeline, makePipelineSettings, BloomType;
   return {
     setters: [function (module) {
       _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
@@ -709,6 +769,7 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
       pipeline = module.pipeline;
     }, function (module) {
       makePipelineSettings = module.makePipelineSettings;
+      BloomType = module.BloomType;
     }],
     execute: function () {
       exports('getPingPongRenderTarget', getPingPongRenderTarget);
@@ -844,7 +905,6 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
         var pass = ppl.addRenderPass(cameraConfigs.nativeWidth, cameraConfigs.nativeHeight, 'cc-tone-mapping');
         pass.addRenderTarget(cameraConfigs.colorName, LoadOp.CLEAR, StoreOp.STORE, sClearColorTransparentBlack);
         pass.addTexture(input, 'inputTexture');
-        pass.setVec4('g_platform', pplConfigs.platform);
         pass.addQueue(rendering.QueueHint.OPAQUE).addFullscreenQuad(cameraConfigs.copyAndTonemapMaterial, 1);
         return pass;
       }
@@ -1088,6 +1148,8 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
           }
         };
         _proto2.setup = function setup(ppl, pplConfigs, cameraConfigs, camera, context) {
+          // Add global constants
+          ppl.setVec4('g_platform', pplConfigs.platform);
           var id = camera.window.renderWindowId;
           var scene = camera.scene;
           var mainLight = scene.mainLight;
@@ -1383,6 +1445,9 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
       }());
       BuiltinForwardPassBuilder.ConfigOrder = 100;
       BuiltinForwardPassBuilder.RenderOrder = 100;
+      function downSize(size, scale) {
+        return Math.max(Math.floor(size * scale), 1);
+      }
       var BuiltinBloomPassBuilder = exports('BuiltinBloomPassBuilder', /*#__PURE__*/function () {
         function BuiltinBloomPassBuilder() {
           // Bloom
@@ -1392,6 +1457,19 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
           this._bloomWidths = [];
           this._bloomHeights = [];
           this._bloomTexNames = [];
+          // Mipmap Bloom
+          this._bloomUpSampleTexDescs = [];
+          this._bloomDownSampleTexDescs = [];
+          this._prefilterTexDesc = {
+            name: '',
+            width: 0,
+            height: 0
+          };
+          this._originalColorDesc = {
+            name: '',
+            width: 0,
+            height: 0
+          };
         }
         var _proto3 = BuiltinBloomPassBuilder.prototype;
         _proto3.getConfigOrder = function getConfigOrder() {
@@ -1401,22 +1479,56 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
           return 200;
         };
         _proto3.configCamera = function configCamera(camera, pipelineConfigs, cameraConfigs) {
-          cameraConfigs.enableBloom = cameraConfigs.settings.bloom.enabled && !!cameraConfigs.settings.bloom.material;
+          var bloom = cameraConfigs.settings.bloom;
+          var hasValidMaterial = bloom.type === BloomType.KawaseDualFilter && !!bloom.kawaseFilterMaterial || bloom.type === BloomType.MipmapFilter && !!bloom.mipmapFilterMaterial;
+          cameraConfigs.enableBloom = bloom.enabled && hasValidMaterial;
           if (cameraConfigs.enableBloom) {
             ++cameraConfigs.remainingPasses;
           }
         };
         _proto3.windowResize = function windowResize(ppl, pplConfigs, cameraConfigs, window) {
-          if (cameraConfigs.enableBloom) {
-            var id = window.renderWindowId;
+          if (!cameraConfigs.enableBloom) {
+            return;
+          }
+          var width = cameraConfigs.width,
+            height = cameraConfigs.height,
+            bloom = cameraConfigs.settings.bloom;
+          var id = window.renderWindowId;
+          var format = cameraConfigs.radianceFormat;
+          if (bloom.type === BloomType.KawaseDualFilter) {
             var bloomWidth = cameraConfigs.width;
             var bloomHeight = cameraConfigs.height;
-            for (var i = 0; i !== cameraConfigs.settings.bloom.iterations + 1; ++i) {
+            for (var i = 0; i !== bloom.iterations + 1; ++i) {
               bloomWidth = Math.max(Math.floor(bloomWidth / 2), 1);
               bloomHeight = Math.max(Math.floor(bloomHeight / 2), 1);
-              ppl.addRenderTarget("BloomTex" + id + "_" + i, cameraConfigs.radianceFormat, bloomWidth, bloomHeight);
+              ppl.addRenderTarget("BloomTex" + id + "_" + i, format, bloomWidth, bloomHeight);
             }
+          } else if (bloom.type === BloomType.MipmapFilter) {
+            var iterations = bloom.iterations;
+            for (var _i = 0; _i !== iterations + 1; ++_i) {
+              // DownSample
+              if (_i < iterations) {
+                var scale = Math.pow(0.5, _i + 2);
+                this._bloomDownSampleTexDescs[_i] = this.createTexture(ppl, "DownSampleColor" + id + _i, downSize(width, scale), downSize(height, scale), format);
+              }
+              // UpSample
+              if (_i < iterations - 1) {
+                var _scale = Math.pow(0.5, iterations - _i - 1);
+                this._bloomUpSampleTexDescs[_i] = this.createTexture(ppl, "UpSampleColor" + id + _i, downSize(width, _scale), downSize(height, _scale), format);
+              }
+            }
+            this._originalColorDesc = this.createTexture(ppl, "OriginalColor" + id, width, height, format);
+            this._prefilterTexDesc = this.createTexture(ppl, "PrefilterColor" + id, downSize(width, 0.5), downSize(height, 0.5), format);
           }
+        };
+        _proto3.createTexture = function createTexture(ppl, name, width, height, format) {
+          var desc = {
+            name: name,
+            width: width,
+            height: height
+          };
+          ppl.addRenderTarget(desc.name, format, desc.width, desc.height);
+          return desc;
         };
         _proto3.setup = function setup(ppl, pplConfigs, cameraConfigs, camera, context, prevRenderPass) {
           if (!cameraConfigs.enableBloom) {
@@ -1424,9 +1536,24 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
           }
           --cameraConfigs.remainingPasses;
           assert(cameraConfigs.remainingPasses >= 0);
+          var bloom = cameraConfigs.settings.bloom;
           var id = camera.window.renderWindowId;
-          assert(!!cameraConfigs.settings.bloom.material);
-          return this._addKawaseDualFilterBloomPasses(ppl, pplConfigs, cameraConfigs, cameraConfigs.settings, cameraConfigs.settings.bloom.material, id, cameraConfigs.width, cameraConfigs.height, context.colorName);
+          switch (bloom.type) {
+            case BloomType.KawaseDualFilter:
+              {
+                var material = bloom.kawaseFilterMaterial;
+                assert(!!material);
+                return this._addKawaseDualFilterBloomPasses(ppl, pplConfigs, cameraConfigs, cameraConfigs.settings, material, id, cameraConfigs.width, cameraConfigs.height, context.colorName);
+              }
+            case BloomType.MipmapFilter:
+              {
+                var _material = bloom.mipmapFilterMaterial;
+                assert(!!_material);
+                return this._addMipmapFilterBloomPasses(ppl, pplConfigs, cameraConfigs, cameraConfigs.settings, _material, id, cameraConfigs.width, cameraConfigs.height, context.colorName);
+              }
+            default:
+              return prevRenderPass;
+          }
         };
         _proto3._addKawaseDualFilterBloomPasses = function _addKawaseDualFilterBloomPasses(ppl, pplConfigs, cameraConfigs, settings, bloomMaterial, id, width, height, radianceName) {
           var QueueHint = rendering.QueueHint;
@@ -1448,13 +1575,13 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
 
           // Bloom texture names
           this._bloomTexNames.length = sizeCount;
-          for (var _i = 0; _i !== sizeCount; ++_i) {
-            this._bloomTexNames[_i] = "BloomTex" + id + "_" + _i;
+          for (var _i2 = 0; _i2 !== sizeCount; ++_i2) {
+            this._bloomTexNames[_i2] = "BloomTex" + id + "_" + _i2;
           }
 
           // Setup bloom parameters
           this._bloomParams.x = pplConfigs.useFloatOutput ? 1 : 0;
-          this._bloomParams.x = 0; // unused
+          this._bloomParams.y = 0; // unused
           this._bloomParams.z = settings.bloom.threshold;
           this._bloomParams.w = settings.bloom.enableAlphaMask ? 1 : 0;
 
@@ -1462,41 +1589,102 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
           var prefilterPass = ppl.addRenderPass(this._bloomWidths[0], this._bloomHeights[0], 'cc-bloom-prefilter');
           prefilterPass.addRenderTarget(this._bloomTexNames[0], LoadOp.CLEAR, StoreOp.STORE, this._clearColorTransparentBlack);
           prefilterPass.addTexture(radianceName, 'inputTexture');
-          prefilterPass.setVec4('g_platform', pplConfigs.platform);
           prefilterPass.setVec4('bloomParams', this._bloomParams);
           prefilterPass.addQueue(QueueHint.OPAQUE).addFullscreenQuad(bloomMaterial, 0);
 
           // Downsample passes
-          for (var _i2 = 1; _i2 !== sizeCount; ++_i2) {
-            var downPass = ppl.addRenderPass(this._bloomWidths[_i2], this._bloomHeights[_i2], 'cc-bloom-downsample');
-            downPass.addRenderTarget(this._bloomTexNames[_i2], LoadOp.CLEAR, StoreOp.STORE, this._clearColorTransparentBlack);
-            downPass.addTexture(this._bloomTexNames[_i2 - 1], 'bloomTexture');
-            this._bloomTexSize.x = this._bloomWidths[_i2 - 1];
-            this._bloomTexSize.y = this._bloomHeights[_i2 - 1];
-            downPass.setVec4('g_platform', pplConfigs.platform);
+          for (var _i3 = 1; _i3 !== sizeCount; ++_i3) {
+            var downPass = ppl.addRenderPass(this._bloomWidths[_i3], this._bloomHeights[_i3], 'cc-bloom-downsample');
+            downPass.addRenderTarget(this._bloomTexNames[_i3], LoadOp.CLEAR, StoreOp.STORE, this._clearColorTransparentBlack);
+            downPass.addTexture(this._bloomTexNames[_i3 - 1], 'bloomTexture');
+            this._bloomTexSize.x = this._bloomWidths[_i3 - 1];
+            this._bloomTexSize.y = this._bloomHeights[_i3 - 1];
             downPass.setVec4('bloomTexSize', this._bloomTexSize);
             downPass.addQueue(QueueHint.OPAQUE).addFullscreenQuad(bloomMaterial, 1);
           }
 
           // Upsample passes
-          for (var _i3 = iterations; _i3-- > 0;) {
-            var upPass = ppl.addRenderPass(this._bloomWidths[_i3], this._bloomHeights[_i3], 'cc-bloom-upsample');
-            upPass.addRenderTarget(this._bloomTexNames[_i3], LoadOp.CLEAR, StoreOp.STORE, this._clearColorTransparentBlack);
-            upPass.addTexture(this._bloomTexNames[_i3 + 1], 'bloomTexture');
-            this._bloomTexSize.x = this._bloomWidths[_i3 + 1];
-            this._bloomTexSize.y = this._bloomHeights[_i3 + 1];
-            upPass.setVec4('g_platform', pplConfigs.platform);
+          for (var _i4 = iterations; _i4-- > 0;) {
+            var upPass = ppl.addRenderPass(this._bloomWidths[_i4], this._bloomHeights[_i4], 'cc-bloom-upsample');
+            upPass.addRenderTarget(this._bloomTexNames[_i4], LoadOp.CLEAR, StoreOp.STORE, this._clearColorTransparentBlack);
+            upPass.addTexture(this._bloomTexNames[_i4 + 1], 'bloomTexture');
+            this._bloomTexSize.x = this._bloomWidths[_i4 + 1];
+            this._bloomTexSize.y = this._bloomHeights[_i4 + 1];
             upPass.setVec4('bloomTexSize', this._bloomTexSize);
             upPass.addQueue(QueueHint.OPAQUE).addFullscreenQuad(bloomMaterial, 2);
           }
 
           // Combine pass
+          this._bloomParams.w = settings.bloom.intensity;
           var combinePass = ppl.addRenderPass(width, height, 'cc-bloom-combine');
           combinePass.addRenderTarget(radianceName, LoadOp.LOAD, StoreOp.STORE);
           combinePass.addTexture(this._bloomTexNames[0], 'bloomTexture');
-          combinePass.setVec4('g_platform', pplConfigs.platform);
           combinePass.setVec4('bloomParams', this._bloomParams);
           combinePass.addQueue(QueueHint.BLEND).addFullscreenQuad(bloomMaterial, 3);
+          if (cameraConfigs.remainingPasses === 0) {
+            return addCopyToScreenPass(ppl, pplConfigs, cameraConfigs, radianceName);
+          } else {
+            return combinePass;
+          }
+        };
+        _proto3._addPass = function _addPass(ppl, width, height, layout, colorName, material, passIndex, loadOp, clearColor, queueHint) {
+          if (loadOp === void 0) {
+            loadOp = LoadOp.CLEAR;
+          }
+          if (clearColor === void 0) {
+            clearColor = sClearColorTransparentBlack;
+          }
+          if (queueHint === void 0) {
+            queueHint = rendering.QueueHint.OPAQUE;
+          }
+          var pass = ppl.addRenderPass(width, height, layout);
+          pass.addRenderTarget(colorName, loadOp, StoreOp.STORE, clearColor);
+          pass.addQueue(queueHint).addFullscreenQuad(material, passIndex);
+          return pass;
+        };
+        _proto3._addMipmapFilterBloomPasses = function _addMipmapFilterBloomPasses(ppl, pplConfigs, cameraConfigs, settings, bloomMaterial, id, width, height, radianceName) {
+          // Setup bloom parameters
+          this._bloomParams.x = pplConfigs.useFloatOutput ? 1 : 0;
+          this._bloomParams.x = 0; // unused
+          this._bloomParams.z = settings.bloom.threshold;
+          this._bloomParams.w = settings.bloom.intensity;
+          var prefilterInfo = this._prefilterTexDesc;
+
+          // Prefilter pass
+          var currSamplePass = this._addPass(ppl, prefilterInfo.width, prefilterInfo.height, 'cc-bloom-mipmap-prefilter', prefilterInfo.name, bloomMaterial, 0);
+          currSamplePass.addTexture(radianceName, 'mainTexture');
+          currSamplePass.setVec4('bloomParams', this._bloomParams);
+          var downSampleInfos = this._bloomDownSampleTexDescs;
+          // Downsample passes
+          for (var i = 0; i < downSampleInfos.length; ++i) {
+            var currInfo = downSampleInfos[i];
+            var samplerSrc = i === 0 ? prefilterInfo : downSampleInfos[i - 1];
+            var samplerSrcName = samplerSrc.name;
+            this._bloomTexSize.x = 1 / samplerSrc.width;
+            this._bloomTexSize.y = 1 / samplerSrc.height;
+            currSamplePass = this._addPass(ppl, currInfo.width, currInfo.height, 'cc-bloom-mipmap-downsample', currInfo.name, bloomMaterial, 1);
+            currSamplePass.addTexture(samplerSrcName, 'mainTexture');
+            currSamplePass.setVec4('bloomParams', this._bloomTexSize);
+          }
+          var lastIndex = downSampleInfos.length - 1;
+          var upSampleInfos = this._bloomUpSampleTexDescs;
+          // Upsample passes
+          for (var _i5 = 0; _i5 < upSampleInfos.length; _i5++) {
+            var _currInfo = upSampleInfos[_i5];
+            var sampleSrc = _i5 === 0 ? downSampleInfos[lastIndex] : upSampleInfos[_i5 - 1];
+            var sampleSrcName = sampleSrc.name;
+            this._bloomTexSize.x = 1 / sampleSrc.width;
+            this._bloomTexSize.y = 1 / sampleSrc.height;
+            currSamplePass = this._addPass(ppl, _currInfo.width, _currInfo.height, 'cc-bloom-mipmap-upsample', _currInfo.name, bloomMaterial, 2);
+            currSamplePass.addTexture(sampleSrcName, 'mainTexture');
+            currSamplePass.addTexture(downSampleInfos[lastIndex - 1 - _i5].name, 'downsampleTexture');
+            currSamplePass.setVec4('bloomParams', this._bloomTexSize);
+          }
+
+          // Combine pass
+          var combinePass = this._addPass(ppl, width, height, 'cc-bloom-mipmap-combine', radianceName, bloomMaterial, 3, LoadOp.LOAD);
+          combinePass.addTexture(upSampleInfos[upSampleInfos.length - 1].name, 'bloomTexture');
+          combinePass.setVec4('bloomParams', this._bloomParams);
           if (cameraConfigs.remainingPasses === 0) {
             return addCopyToScreenPass(ppl, pplConfigs, cameraConfigs, radianceName);
           } else {
@@ -1566,7 +1754,6 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
             }
             pass.addRenderTarget(colorName, LoadOp.CLEAR, StoreOp.STORE, sClearColorTransparentBlack);
             pass.addTexture(radianceName, 'sceneColorMap');
-            pass.setVec4('g_platform', pplConfigs.platform);
             pass.setVec2('lutTextureSize', this._colorGradingTexSize);
             pass.setFloat('contribute', settings.colorGrading.contribute);
             pass.addQueue(rendering.QueueHint.OPAQUE).addFullscreenQuad(settings.colorGrading.material, isSquareMap ? 1 : 0);
@@ -1574,7 +1761,6 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
             pass = ppl.addRenderPass(width, height, 'cc-tone-mapping');
             pass.addRenderTarget(colorName, LoadOp.CLEAR, StoreOp.STORE, sClearColorTransparentBlack);
             pass.addTexture(radianceName, 'inputTexture');
-            pass.setVec4('g_platform', pplConfigs.platform);
             if (settings.toneMapping.material) {
               pass.addQueue(rendering.QueueHint.OPAQUE).addFullscreenQuad(settings.toneMapping.material, 0);
             } else {
@@ -1638,7 +1824,6 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
           var pass = ppl.addRenderPass(width, height, 'cc-fxaa');
           pass.addRenderTarget(colorName, LoadOp.CLEAR, StoreOp.STORE, sClearColorTransparentBlack);
           pass.addTexture(ldrColorName, 'sceneColorMap');
-          pass.setVec4('g_platform', pplConfigs.platform);
           pass.setVec4('texSize', this._fxaaParams);
           pass.addQueue(rendering.QueueHint.OPAQUE).addFullscreenQuad(fxaaMaterial, 0);
           return pass;
@@ -1687,13 +1872,11 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
           var easuPass = ppl.addRenderPass(nativeWidth, nativeHeight, 'cc-fsr-easu');
           easuPass.addRenderTarget(fsrColorName, LoadOp.CLEAR, StoreOp.STORE, sClearColorTransparentBlack);
           easuPass.addTexture(inputColorName, 'outputResultMap');
-          easuPass.setVec4('g_platform', pplConfigs.platform);
           easuPass.setVec4('fsrTexSize', this._fsrTexSize);
           easuPass.addQueue(rendering.QueueHint.OPAQUE).addFullscreenQuad(fsrMaterial, 0);
           var rcasPass = ppl.addRenderPass(nativeWidth, nativeHeight, 'cc-fsr-rcas');
           rcasPass.addRenderTarget(outputColorName, LoadOp.CLEAR, StoreOp.STORE, sClearColorTransparentBlack);
           rcasPass.addTexture(fsrColorName, 'outputResultMap');
-          rcasPass.setVec4('g_platform', pplConfigs.platform);
           rcasPass.setVec4('fsrTexSize', this._fsrTexSize);
           rcasPass.setVec4('fsrParams', this._fsrParams);
           rcasPass.addQueue(rendering.QueueHint.OPAQUE).addFullscreenQuad(fsrMaterial, 1);
@@ -1723,7 +1906,7 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
         return BuiltinUiPassBuilder;
       }());
       if (rendering) {
-        var QueueHint = rendering.QueueHint,
+        var _QueueHint = rendering.QueueHint,
           SceneFlags = rendering.SceneFlags;
         var BuiltinPipelineBuilder = /*#__PURE__*/function () {
           function BuiltinPipelineBuilder() {
@@ -1788,9 +1971,10 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
             }
             passBuilders.push(this._uiPass);
           };
-          _proto8._setupBuiltinCameraConfigs = function _setupBuiltinCameraConfigs(camera, pipelineConfigs, cameraConfigs) {
+          _proto8._setupBuiltinCameraConfigs = function _setupBuiltinCameraConfigs(ppl, camera, pipelineConfigs, cameraConfigs) {
             var window = camera.window;
             var isMainGameWindow = camera.cameraUsage === CameraUsage.GAME && !!window.swapchain;
+            var isGameView = isMainGameWindow || camera.cameraUsage === CameraUsage.GAME_VIEW;
 
             // Window
             cameraConfigs.isMainGameWindow = isMainGameWindow;
@@ -1802,7 +1986,7 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
 
             // Pipeline
             cameraConfigs.enableFullPipeline = (camera.visibility & Layers.Enum.DEFAULT) !== 0;
-            cameraConfigs.enableProfiler = isMainGameWindow;
+            cameraConfigs.enableProfiler = ppl.profiler && isGameView;
             cameraConfigs.remainingPasses = 0;
 
             // Shading scale
@@ -1823,11 +2007,11 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
             // Depth
             cameraConfigs.enableStoreSceneDepth = false;
           };
-          _proto8._setupCameraConfigs = function _setupCameraConfigs(camera, pipelineConfigs, cameraConfigs) {
+          _proto8._setupCameraConfigs = function _setupCameraConfigs(ppl, camera, pipelineConfigs, cameraConfigs) {
             this._setupPipelinePreview(camera, cameraConfigs);
             this._preparePipelinePasses(cameraConfigs);
             sortPipelinePassBuildersByConfigOrder(this._passBuilders);
-            this._setupBuiltinCameraConfigs(camera, pipelineConfigs, cameraConfigs);
+            this._setupBuiltinCameraConfigs(ppl, camera, pipelineConfigs, cameraConfigs);
             for (var _iterator11 = _createForOfIteratorHelperLoose(this._passBuilders), _step11; !(_step11 = _iterator11()).done;) {
               var builder = _step11.value;
               if (builder.configCamera) {
@@ -1843,7 +2027,7 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
 
           _proto8.windowResize = function windowResize(ppl, window, camera, nativeWidth, nativeHeight) {
             setupPipelineConfigs(ppl, this._configs);
-            this._setupCameraConfigs(camera, this._configs, this._cameraConfigs);
+            this._setupCameraConfigs(ppl, camera, this._configs, this._cameraConfigs);
 
             // Render Window (UI)
             var id = window.renderWindowId;
@@ -1877,6 +2061,7 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
             if (this._initMaterials(ppl)) {
               return;
             }
+
             // Render cameras
             // log(`==================== One Frame ====================`);
             for (var _iterator13 = _createForOfIteratorHelperLoose(cameras), _step13; !(_step13 = _iterator13()).done;) {
@@ -1886,7 +2071,7 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
                 continue;
               }
               // Setup camera configs
-              this._setupCameraConfigs(camera, this._configs, this._cameraConfigs);
+              this._setupCameraConfigs(ppl, camera, this._configs, this._cameraConfigs);
               // log(`Setup camera: ${camera.node!.name}, window: ${camera.window.renderWindowId}, isFull: ${this._cameraConfigs.enableFullPipeline}, `
               //     + `size: ${camera.window.width}x${camera.window.height}`);
 
@@ -1941,7 +2126,7 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
             pass.setViewport(this._viewport);
 
             // The opaque queue is used for Reflection probe preview
-            pass.addQueue(QueueHint.OPAQUE).addScene(camera, SceneFlags.OPAQUE);
+            pass.addQueue(_QueueHint.OPAQUE).addScene(camera, SceneFlags.OPAQUE);
 
             // The blend queue is used for UI and Gizmos
             var flags = SceneFlags.BLEND | SceneFlags.UI;
@@ -1949,7 +2134,7 @@ System.register("chunks:///_virtual/builtin-pipeline.ts", ['./rollupPluginModLoB
               flags |= SceneFlags.PROFILER;
               pass.showStatistics = true;
             }
-            pass.addQueue(QueueHint.BLEND).addScene(camera, flags);
+            pass.addQueue(_QueueHint.BLEND).addScene(camera, flags);
           };
           _proto8._buildForwardPipeline = function _buildForwardPipeline(ppl, camera, scene, passBuilders) {
             sortPipelinePassBuildersByRenderOrder(passBuilders);
