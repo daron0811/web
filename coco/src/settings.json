@@ -58,13 +58,13 @@
         ]
     },
     "launch": {
-        "launchScene": "db://assets/Scenes/01_miniHorse.scene"
+        "launchScene": "db://assets/Scenes/01-MiniHouse.scene"
     },
     "screen": {
         "exactFitScreen": true,
         "designResolution": {
-            "width": 960,
-            "height": 640,
+            "width": 720,
+            "height": 1280,
             "policy": 4
         },
         "orientation": "auto"

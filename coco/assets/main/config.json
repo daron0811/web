@@ -16,16 +16,19 @@
         "951249e0-9f16-456d-8b85-a6ca954da16b",
         "951249e0-9f16-456d-8b85-a6ca954da16b@6c48a",
         "951249e0-9f16-456d-8b85-a6ca954da16b@f9941",
+        "9c05f91c-ecb0-4eff-98cd-36cf31398a01",
+        "9c05f91c-ecb0-4eff-98cd-36cf31398a01@6c48a",
+        "9c05f91c-ecb0-4eff-98cd-36cf31398a01@f9941",
         "a3f180e1-618c-49ba-b68b-3dba116ee182",
         "a3f180e1-618c-49ba-b68b-3dba116ee182@6c48a",
         "a3f180e1-618c-49ba-b68b-3dba116ee182@f9941",
         "ba21476f-2866-4f81-9c4d-6e359316e448",
-        "fd8ec536-a354-4a17-9c74-4f3883c378c8",
-        "fe2b9e18-d200-4aa0-a571-7006d49e44db"
+        "f0824b3a-3f73-4817-9e87-c3d88cc939ed",
+        "fd8ec536-a354-4a17-9c74-4f3883c378c8"
     ],
     "paths": {
-        "fe2b9e18-d200-4aa0-a571-7006d49e44db": [
-            "db:/assets/Scenes/01_miniHorse",
+        "f0824b3a-3f73-4817-9e87-c3d88cc939ed": [
+            "db:/assets/Scenes/01-MiniHouse",
             "cc.SceneAsset",
             1
         ],
@@ -41,7 +44,7 @@
         ]
     },
     "scenes": {
-        "db://assets/Scenes/01_miniHorse.scene": "fe2b9e18-d200-4aa0-a571-7006d49e44db"
+        "db://assets/Scenes/01-MiniHouse.scene": "f0824b3a-3f73-4817-9e87-c3d88cc939ed"
     },
     "packs": {},
     "versions": {

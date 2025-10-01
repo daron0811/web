@@ -1,6 +1,173 @@
-System.register("chunks:///_virtual/main", ['./MiniHorse.ts'], function () {
+System.register("chunks:///_virtual/EnvCheck.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Node, Label, Button, sys, Component;
   return {
-    setters: [null],
+    setters: [function (module) {
+      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
+      _inheritsLoose = module.inheritsLoose;
+      _initializerDefineProperty = module.initializerDefineProperty;
+      _assertThisInitialized = module.assertThisInitialized;
+    }, function (module) {
+      cclegacy = module.cclegacy;
+      _decorator = module._decorator;
+      Node = module.Node;
+      Label = module.Label;
+      Button = module.Button;
+      sys = module.sys;
+      Component = module.Component;
+    }],
+    execute: function () {
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+      cclegacy._RF.push({}, "1cea6lVxEhCg7XcsVvbU5NJ", "EnvCheck", undefined);
+      var ccclass = _decorator.ccclass,
+        property = _decorator.property;
+      var EnvCheck = exports('EnvCheck', (_dec = ccclass('EnvCheck'), _dec2 = property({
+        type: Node
+      }), _dec3 = property({
+        type: Label
+      }), _dec4 = property({
+        type: Label
+      }), _dec5 = property({
+        type: Node
+      }), _dec6 = property({
+        type: Node
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(EnvCheck, _Component);
+        function EnvCheck() {
+          var _this;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+          _initializerDefineProperty(_this, "popUpNode", _descriptor, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "titleLabel", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "messageLabel", _descriptor3, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "proceedButtonNode", _descriptor4, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "targetStartPanel", _descriptor5, _assertThisInitialized(_this));
+          // ← 指向你的 StartPanel（MiniHorse 用的）
+          _this.reasons = [];
+          return _this;
+        }
+        var _proto = EnvCheck.prototype;
+        _proto.onLoad = function onLoad() {
+          var _this$proceedButtonNo,
+            _this2 = this;
+          // 預設：先鎖住開始面板
+          if (this.targetStartPanel) this.targetStartPanel.active = false;
+          var ok = this.runChecks();
+          this.renderUI(ok);
+
+          // 綁定「我了解，繼續」按鈕
+          var btn = (_this$proceedButtonNo = this.proceedButtonNode) == null ? void 0 : _this$proceedButtonNo.getComponent(Button);
+          if (btn) {
+            btn.interactable = true;
+            btn.node.on('click', function () {
+              return _this2.onProceed(ok);
+            });
+          }
+        };
+        _proto.runChecks = function runChecks() {
+          this.reasons.length = 0;
+
+          // 1) 手機裝置
+          var isMobile = sys.isMobile || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+          // 2) 瀏覽器（Safari / Chrome）
+          var ua = navigator.userAgent;
+          var isIOS = /iPad|iPhone|iPod/.test(ua);
+          // iOS 上的所有瀏覽器都是 WebKit，但我們仍允許標稱的 Safari/Chrome
+          var isSafari = /Safari/.test(ua) && !/Chrome|CriOS|EdgiOS|OPiOS/i.test(ua);
+          var isChrome = /Chrome|CriOS/i.test(ua);
+          var isAllowedBrowser = isSafari || isChrome;
+
+          // 避免嵌入式 WebView（常見：FB/IG/LINE）
+          var isInApp = /FBAN|FBAV|Instagram|Line\/|Line/i.test(ua);
+
+          // 3) HTTPS（或本機）
+          var isHTTPS = location.protocol === 'https:' || location.hostname === 'localhost';
+
+          // 4) 感測器可用性（至少能監聽 devicemotion）
+          var motionAvailable = typeof window !== 'undefined' && 'ondevicemotion' in window;
+          if (!isMobile) this.reasons.push('必須使用「手機或平板」裝置。');
+          if (!isAllowedBrowser) this.reasons.push('請使用「Safari」或「Chrome」瀏覽器。');
+          if (isInApp) this.reasons.push('請以「Safari/Chrome」開啟（避免在 LINE/FB/IG 內建瀏覽器）。');
+          if (!isHTTPS) this.reasons.push('請使用「HTTPS」網址（或本機環境）。');
+          if (!motionAvailable) this.reasons.push('此裝置/瀏覽器不支援「裝置動態 (Devicemotion)」。');
+          return this.reasons.length === 0;
+        };
+        _proto.renderUI = function renderUI(browserOk) {
+          if (browserOk) {
+            this.popUpNode.active = false;
+            if (this.targetStartPanel) this.targetStartPanel.active = true;
+            console.log(browserOk);
+            return;
+          }
+          this.popUpNode.active = true;
+          console.log(browserOk);
+          if (this.titleLabel) {
+            this.titleLabel.string = browserOk ? '環境檢查通過' : '請使用建議環境';
+          }
+
+          // const tips = [
+          //   '1. 必須使用手機或平板裝置',
+          //   '2. 建議使用 Safari（iOS）或 Chrome（Android/iOS）遊玩',
+          //   '3. 使用 HTTPS 網址（避免 http）',
+          //   '4. 若在 App 內嵌瀏覽器（LINE/FB/IG）開啟，請改用 Safari/Chrome',
+          //   '5. 稍後按下開始時，系統會請求「感測器」使用權限',
+          // ].join('\n');
+
+          var body = browserOk ? '您的裝置看起來可以正常遊玩。\n\n' : '偵測到以下問題：\n- ' + this.reasons.join('\n- ');
+          if (this.messageLabel) this.messageLabel.string = body;
+        };
+        _proto.onProceed = function onProceed(ok) {
+          console.log(ok);
+          this.popUpNode.active = false;
+          if (this.targetStartPanel) this.targetStartPanel.active = true;
+        };
+        return EnvCheck;
+      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "popUpNode", [_dec2], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "titleLabel", [_dec3], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "messageLabel", [_dec4], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "proceedButtonNode", [_dec5], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "targetStartPanel", [_dec6], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      })), _class2)) || _class));
+      cclegacy._RF.pop();
+    }
+  };
+});
+
+System.register("chunks:///_virtual/main", ['./EnvCheck.ts', './MiniHorse.ts'], function () {
+  return {
+    setters: [null, null],
     execute: function () {}
   };
 });
