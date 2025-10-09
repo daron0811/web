@@ -65,7 +65,7 @@
         "designResolution": {
             "width": 720,
             "height": 1280,
-            "policy": 4
+            "policy": 3
         },
         "orientation": "auto"
     },
