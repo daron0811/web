@@ -687,7 +687,7 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
       MainGame01 = module.MainGame01;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
       cclegacy._RF.push({}, "45d49rPkZpCUb3+vvEPIhdb", "GamePanel", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
@@ -700,7 +700,9 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
       }), _dec5 = property({
         type: Node,
         tooltip: '點擊以開始的UI（授權會綁在此按鈕）'
-      }), _dec6 = property(Label), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+      }), _dec6 = property(Label), _dec7 = property({
+        type: Label
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(GamePanel, _Component);
         function GamePanel() {
           var _this;
@@ -717,6 +719,7 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
           _this.isPlaying = false;
           _this.progress = 0;
           _this.lastShakeAt = 0;
+          _initializerDefineProperty(_this, "logLabel", _descriptor6, _assertThisInitialized(_this));
           _this.onDeviceMotion = function (event) {
             if (!_this.isPlaying) return;
             var acc = event.accelerationIncludingGravity;
@@ -732,6 +735,10 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
           return _this;
         }
         var _proto = GamePanel.prototype;
+        // ← 修正名稱
+        _proto.setLog = function setLog(msg) {
+          if (this.logLabel) this.logLabel.string = msg;
+        };
         _proto.onLoad = function onLoad() {
           // 初始化 UI（不要自動 start）
           this.updateProgress(0);
@@ -800,23 +807,23 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
                     _context2.next = 11;
                     break;
                   }
-                  console.log('Requesting DeviceMotion permission…');
+                  this.setLog('Requesting DeviceMotion permission…');
                   _context2.next = 9;
                   return dm.requestPermission();
                 case 9:
                   res = _context2.sent;
-                  console.log("DeviceMotion: " + res);
+                  this.setLog("DeviceMotion: " + res);
                 case 11:
                   if (!(dor && typeof dor.requestPermission === 'function')) {
                     _context2.next = 17;
                     break;
                   }
-                  console.log('Requesting DeviceOrientation permission…');
+                  this.setLog('Requesting DeviceOrientation permission…');
                   _context2.next = 15;
                   return dor.requestPermission();
                 case 15:
                   res2 = _context2.sent;
-                  console.log("DeviceOrientation: " + res2);
+                  this.setLog("DeviceOrientation: " + res2);
                 case 17:
                   _context2.next = 23;
                   break;
@@ -824,16 +831,16 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
                   _context2.prev = 19;
                   _context2.t0 = _context2["catch"](3);
                   console.warn('Motion permission request error:', _context2.t0);
-                  console.log('Permission error, check Safari setting / HTTPS');
+                  this.setLog('Permission error, check Safari setting / HTTPS');
                 case 23:
                   // 綁定 devicemotion（若支援）
                   if (typeof window !== 'undefined' && 'ondevicemotion' in window) {
-                    console.log('Binding devicemotion…');
+                    this.setLog('Binding devicemotion…');
                     window.addEventListener('devicemotion', this.onDeviceMotion, {
                       passive: true
                     });
                   } else {
-                    console.log('devicemotion not supported in this environment.');
+                    this.setLog('devicemotion not supported in this environment.');
                   }
                 case 24:
                 case "end":
@@ -936,6 +943,13 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
           return null;
         }
       }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "countdownLabel", [_dec6], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "logLabel", [_dec7], {
         configurable: true,
         enumerable: true,
         writable: true,
