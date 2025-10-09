@@ -663,8 +663,8 @@ System.register("chunks:///_virtual/FailPanel.ts", ['./rollupPluginModLoBabelHel
   };
 });
 
-System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './MainGame01.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Sprite, Label, Node, Component, Vec3, tween, sys, MainGame01;
+System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Sprite, Label, Node, Component, Vec3, tween, sys;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
@@ -683,25 +683,37 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
       Vec3 = module.Vec3;
       tween = module.tween;
       sys = module.sys;
-    }, function (module) {
-      MainGame01 = module.MainGame01;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
       cclegacy._RF.push({}, "45d49rPkZpCUb3+vvEPIhdb", "GamePanel", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
+
+      /**
+       * GamePanel（Auto-Start Motion Version, 無 tapOverlay）
+       *
+       * 目標：
+       *  - 節點啟用（onEnable）時自動嘗試啟用加速度計
+       *  - Android / 已授權 iOS → 直接啟動
+       *  - iOS 首次或尚未授權 → 會觸發系統原生的詢問介面
+       *  - 將授權結果寫入 localStorage，下次即可真正做到「一開就啟動」
+       */
+
       var GamePanel = exports('GamePanel', (_dec = ccclass('GamePanel'), _dec2 = property({
-        type: Sprite
+        type: Sprite,
+        tooltip: '能量條（使用 fillRange 0~1 表示進度）'
       }), _dec3 = property({
         type: Label
       }), _dec4 = property({
-        type: Node
-      }), _dec5 = property({
         type: Node,
-        tooltip: '點擊以開始的UI（授權會綁在此按鈕）'
-      }), _dec6 = property(Label), _dec7 = property({
-        type: Label
+        tooltip: '顯示倒數動畫的容器'
+      }), _dec5 = property({
+        type: Label,
+        tooltip: '倒數 3/2/1/GO 顯示'
+      }), _dec6 = property({
+        type: Label,
+        tooltip: '除錯訊息（可選）'
       }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(GamePanel, _Component);
         function GamePanel() {
@@ -712,206 +724,203 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
           _initializerDefineProperty(_this, "energyProgress", _descriptor, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "timerLabel", _descriptor2, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "horse", _descriptor3, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "readyPanel", _descriptor4, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "countdownLabel", _descriptor5, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "readyPanel", _descriptor3, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "countdownLabel", _descriptor4, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "logLabel", _descriptor5, _assertThisInitialized(_this));
           _this.timeLeft = 30;
           _this.isPlaying = false;
           _this.progress = 0;
           _this.lastShakeAt = 0;
-          _initializerDefineProperty(_this, "logLabel", _descriptor6, _assertThisInitialized(_this));
-          _this.onDeviceMotion = function (event) {
+          _this.motionBound = false;
+          _this.onDeviceMotion = function (ev) {
             if (!_this.isPlaying) return;
-            var acc = event.accelerationIncludingGravity;
+            var acc = ev.accelerationIncludingGravity || ev.acceleration;
             if (!acc) return;
-            var magnitude = Math.abs(acc.x || 0) + Math.abs(acc.y || 0) + Math.abs(acc.z || 0);
-            var now = performance.now();
-            if (magnitude > 18 && now - _this.lastShakeAt > 60) {
-              // 門檻/節流可依實機調整
+            var now = Date.now();
+            if (now - _this.lastShakeAt < 600) return;
+            var mag = Math.sqrt(Math.pow(acc.x || 0, 2) + Math.pow(acc.y || 0, 2) + Math.pow(acc.z || 0, 2));
+            if (mag > 10) {
               _this.lastShakeAt = now;
-              _this.updateProgress(_this.progress + 0.02);
+              _this.updateProgress(_this.progress + 0.1);
             }
           };
           return _this;
         }
         var _proto = GamePanel.prototype;
-        // ← 修正名稱
-        _proto.setLog = function setLog(msg) {
-          if (this.logLabel) this.logLabel.string = msg;
-        };
         _proto.onLoad = function onLoad() {
-          // 初始化 UI（不要自動 start）
           this.updateProgress(0);
-          if (this.timerLabel) this.timerLabel.string = " 倒數秒數: " + '30';
-
-          // 顯示開始面板，等待使用者點擊
-          // if (this.startPanel) this.startPanel.active = true;
+          if (this.timerLabel) this.timerLabel.string = '倒數秒數: 30';
+          if (this.readyPanel) this.readyPanel.active = false;
         };
-
         _proto.onEnable = function onEnable() {
-          this.onClickStart();
-        }
-
-        // start() {
-        //     //初始就開始遊戲
-        //     this.onClickStart();
-        // }
-
-        // Start 按鈕的 onClick 綁這個方法
-        ;
-
-        _proto.onClickStart = /*#__PURE__*/
-        function () {
-          var _onClickStart = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-            var _this2 = this;
+          this.tryAutoStart();
+        };
+        _proto.onDisable = function onDisable() {
+          this.unbindMotionListener();
+        };
+        _proto.onDestroy = function onDestroy() {
+          this.unbindMotionListener();
+        };
+        _proto.tryAutoStart = /*#__PURE__*/function () {
+          var _tryAutoStart = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            var ok, dm, res;
             return _regeneratorRuntime().wrap(function _callee$(_context) {
               while (1) switch (_context.prev = _context.next) {
                 case 0:
                   _context.next = 2;
-                  return this.enableMotion();
+                  return this.requestIOSPermissionIfNeeded();
                 case 2:
-                  // <- 使用者互動觸發的授權
-                  this.readyPanel.active = true;
-                  this.ReadyTween(function () {
-                    _this2.startGame();
-                  });
-                case 4:
+                  ok = _context.sent;
+                  if (!ok) {
+                    _context.next = 7;
+                    break;
+                  }
+                  this.bindMotionListener();
+                  this.startGameFlow();
+                  return _context.abrupt("return");
+                case 7:
+                  _context.prev = 7;
+                  dm = globalThis.DeviceMotionEvent;
+                  if (!(dm && typeof dm.requestPermission === 'function')) {
+                    _context.next = 15;
+                    break;
+                  }
+                  _context.next = 12;
+                  return dm.requestPermission();
+                case 12:
+                  res = _context.sent;
+                  this.setLog("DeviceMotion permission: " + res);
+                  if (res === 'granted') {
+                    sys.localStorage.setItem('motionGranted', '1');
+                    this.bindMotionListener();
+                    this.startGameFlow();
+                  } else {
+                    this.setLog('需要允許「動作與方向存取」才能開始');
+                  }
+                case 15:
+                  _context.next = 20;
+                  break;
+                case 17:
+                  _context.prev = 17;
+                  _context.t0 = _context["catch"](7);
+                  this.setLog("requestPermission error: " + _context.t0);
+                case 20:
                 case "end":
                   return _context.stop();
               }
-            }, _callee, this);
+            }, _callee, this, [[7, 17]]);
           }));
-          function onClickStart() {
-            return _onClickStart.apply(this, arguments);
+          function tryAutoStart() {
+            return _tryAutoStart.apply(this, arguments);
           }
-          return onClickStart;
-        }() //啟動加速度計授權
-        ;
-
-        _proto.enableMotion = /*#__PURE__*/
-        function () {
-          var _enableMotion = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-            var isIOS, dm, dor, res, res2;
+          return tryAutoStart;
+        }();
+        _proto.requestIOSPermissionIfNeeded = /*#__PURE__*/function () {
+          var _requestIOSPermissionIfNeeded = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+            var dm, needGesture;
             return _regeneratorRuntime().wrap(function _callee2$(_context2) {
               while (1) switch (_context2.prev = _context2.next) {
                 case 0:
-                  isIOS = sys.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent);
                   dm = globalThis.DeviceMotionEvent;
-                  dor = globalThis.DeviceOrientationEvent;
-                  _context2.prev = 3;
-                  if (!isIOS) {
-                    _context2.next = 17;
+                  needGesture = !!(dm && typeof dm.requestPermission === 'function');
+                  if (needGesture) {
+                    _context2.next = 4;
                     break;
                   }
-                  if (!(dm && typeof dm.requestPermission === 'function')) {
-                    _context2.next = 11;
+                  return _context2.abrupt("return", true);
+                case 4:
+                  if (!(sys.localStorage.getItem('motionGranted') === '1')) {
+                    _context2.next = 6;
                     break;
                   }
-                  this.setLog('Requesting DeviceMotion permission…');
-                  _context2.next = 9;
-                  return dm.requestPermission();
-                case 9:
-                  res = _context2.sent;
-                  this.setLog("DeviceMotion: " + res);
-                case 11:
-                  if (!(dor && typeof dor.requestPermission === 'function')) {
-                    _context2.next = 17;
-                    break;
-                  }
-                  this.setLog('Requesting DeviceOrientation permission…');
-                  _context2.next = 15;
-                  return dor.requestPermission();
-                case 15:
-                  res2 = _context2.sent;
-                  this.setLog("DeviceOrientation: " + res2);
-                case 17:
-                  _context2.next = 23;
-                  break;
-                case 19:
-                  _context2.prev = 19;
-                  _context2.t0 = _context2["catch"](3);
-                  console.warn('Motion permission request error:', _context2.t0);
-                  this.setLog('Permission error, check Safari setting / HTTPS');
-                case 23:
-                  // 綁定 devicemotion（若支援）
-                  if (typeof window !== 'undefined' && 'ondevicemotion' in window) {
-                    this.setLog('Binding devicemotion…');
-                    window.addEventListener('devicemotion', this.onDeviceMotion, {
-                      passive: true
-                    });
-                  } else {
-                    this.setLog('devicemotion not supported in this environment.');
-                  }
-                case 24:
+                  return _context2.abrupt("return", true);
+                case 6:
+                  return _context2.abrupt("return", false);
+                case 7:
                 case "end":
                   return _context2.stop();
               }
-            }, _callee2, this, [[3, 19]]);
+            }, _callee2);
           }));
-          function enableMotion() {
-            return _enableMotion.apply(this, arguments);
+          function requestIOSPermissionIfNeeded() {
+            return _requestIOSPermissionIfNeeded.apply(this, arguments);
           }
-          return enableMotion;
-        }() //播放準備動畫效果
-        ;
-
-        _proto.ReadyTween = function ReadyTween(callback) {
-          var _this3 = this;
-          if (!this.countdownLabel) return;
-          var texts = ["3", "2", "1", "GO"];
-          var index = 0;
-          var showNext = function showNext() {
-            if (index >= texts.length) {
-              if (callback) callback();
-              return;
-            }
-            var text = texts[index];
-            index++;
-            _this3.countdownLabel.string = text;
-            _this3.countdownLabel.node.scale = new Vec3(0, 0, 0);
-            tween(_this3.countdownLabel.node).to(1.0, {
-              scale: new Vec3(1, 1, 1)
-            }, {
-              easing: "backOut"
-            }) // 由小到大
-            // .delay(0.3) // 停一下
-            .call(function () {
-              showNext();
-            }).start();
-          };
-          showNext();
+          return requestIOSPermissionIfNeeded;
+        }();
+        _proto.bindMotionListener = function bindMotionListener() {
+          if (this.motionBound) return;
+          if (typeof window !== 'undefined' && 'ondevicemotion' in window) {
+            window.addEventListener('devicemotion', this.onDeviceMotion, {
+              passive: true
+            });
+            this.motionBound = true;
+            this.setLog('devicemotion bound');
+          } else {
+            this.setLog('devicemotion not supported');
+          }
+        };
+        _proto.unbindMotionListener = function unbindMotionListener() {
+          if (!this.motionBound) return;
+          window.removeEventListener('devicemotion', this.onDeviceMotion);
+          this.motionBound = false;
+          this.setLog('devicemotion unbound');
+        };
+        _proto.startGameFlow = function startGameFlow() {
+          var _this2 = this;
+          if (this.readyPanel) this.readyPanel.active = true;
+          this.ReadyTween(function () {
+            _this2.startGame();
+          });
         };
         _proto.startGame = function startGame() {
-          this.readyPanel.active = false;
+          if (this.readyPanel) this.readyPanel.active = false;
           this.isPlaying = true;
           this.timeLeft = 30;
           this.updateProgress(0);
           if (this.timerLabel) this.timerLabel.string = '30';
-          if (this.readyPanel) this.readyPanel.active = false;
         };
         _proto.endGame = function endGame() {
           this.isPlaying = false;
-          if (typeof window !== 'undefined') {
-            window.removeEventListener('devicemotion', this.onDeviceMotion);
-          }
-          MainGame01.instance.ShowEnd(this.progress >= 1);
+          this.unbindMotionListener();
+          this.setLog('Game End');
         };
         _proto.update = function update(dt) {
           if (!this.isPlaying) return;
           this.timeLeft -= dt;
-          if (this.timerLabel) {
-            this.timerLabel.string = Math.max(0, Math.ceil(this.timeLeft)).toString();
-          }
-          if (this.timeLeft <= 0) {
-            this.endGame();
-          }
+          if (this.timerLabel) this.timerLabel.string = "\u5012\u6578\u79D2\u6578: " + Math.max(0, Math.ceil(this.timeLeft));
+          if (this.timeLeft <= 0) this.endGame();
         };
         _proto.updateProgress = function updateProgress(v) {
           this.progress = Math.max(0, Math.min(1, v));
           if (this.energyProgress) this.energyProgress.fillRange = this.progress;
-          if (this.progress >= 1) {
-            this.endGame();
+          if (this.progress >= 1) this.endGame();
+        };
+        _proto.ReadyTween = function ReadyTween(callback) {
+          var _this3 = this;
+          if (!this.countdownLabel || !this.readyPanel) {
+            callback && callback();
+            return;
           }
+          var texts = ['3', '2', '1', 'GO'];
+          var index = 0;
+          var showOne = function showOne() {
+            var t = texts[index];
+            _this3.countdownLabel.string = t;
+            _this3.countdownLabel.node.scale = new Vec3(0.2, 0.2, 1);
+            tween(_this3.countdownLabel.node).to(0.18, {
+              scale: new Vec3(1.1, 1.1, 1)
+            }).to(0.08, {
+              scale: new Vec3(1.0, 1.0, 1)
+            }).delay(0.2).call(function () {
+              index++;
+              if (index < texts.length) showOne();else callback && callback();
+            }).start();
+          };
+          this.readyPanel.active = true;
+          showOne();
+        };
+        _proto.setLog = function setLog(msg) {
+          if (this.logLabel) this.logLabel.string = msg;
         };
         return GamePanel;
       }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "energyProgress", [_dec2], {
@@ -928,28 +937,21 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "horse", [_dec4], {
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "readyPanel", [_dec4], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "readyPanel", [_dec5], {
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "countdownLabel", [_dec5], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "countdownLabel", [_dec6], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "logLabel", [_dec7], {
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "logLabel", [_dec6], {
         configurable: true,
         enumerable: true,
         writable: true,
