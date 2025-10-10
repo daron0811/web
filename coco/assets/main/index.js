@@ -1,5 +1,5 @@
 System.register("chunks:///_virtual/AccelExample.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Label, input, Input, Component;
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Label, Button, input, Input, Component;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
@@ -12,16 +12,17 @@ System.register("chunks:///_virtual/AccelExample.ts", ['./rollupPluginModLoBabel
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
       Label = module.Label;
+      Button = module.Button;
       input = module.input;
       Input = module.Input;
       Component = module.Component;
     }],
     execute: function () {
-      var _dec, _dec2, _class, _class2, _descriptor, _descriptor2, _descriptor3;
+      var _dec, _dec2, _dec3, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4;
       cclegacy._RF.push({}, "d775aebNcVA5pYycYV2tsw2", "AccelExample", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
-      var AccelExample = exports('AccelExample', (_dec = ccclass('AccelExample'), _dec2 = property(Label), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+      var AccelExample = exports('AccelExample', (_dec = ccclass('AccelExample'), _dec2 = property(Label), _dec3 = property(Button), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(AccelExample, _Component);
         function AccelExample() {
           var _this;
@@ -30,10 +31,11 @@ System.register("chunks:///_virtual/AccelExample.ts", ['./rollupPluginModLoBabel
           }
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
           _initializerDefineProperty(_this, "infoLabel", _descriptor, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "button", _descriptor2, _assertThisInitialized(_this));
           /** 搖一搖靈敏度（越小越敏感），單位：m/s^2 的變化量 */
-          _initializerDefineProperty(_this, "shakeThreshold", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "shakeThreshold", _descriptor3, _assertThisInitialized(_this));
           /** 搖一搖事件的防抖(ms) */
-          _initializerDefineProperty(_this, "shakeDebounceMs", _descriptor3, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "shakeDebounceMs", _descriptor4, _assertThisInitialized(_this));
           _this._lastShakeAt = 0;
           _this._lastVec = {
             x: 0,
@@ -47,6 +49,7 @@ System.register("chunks:///_virtual/AccelExample.ts", ['./rollupPluginModLoBabel
         _proto.onLoad = function onLoad() {
           // 嘗試自動啟用（iOS 可能需要使用者手勢授權）
           this.startAccelerometer();
+          this.button.node.on(Button.EventType.CLICK, this.requestIOSPermission, this);
         };
         _proto.onEnable = function onEnable() {
           // 監聽加速度
@@ -71,21 +74,19 @@ System.register("chunks:///_virtual/AccelExample.ts", ['./rollupPluginModLoBabel
                 case 0:
                   // 部分瀏覽器（iOS 13+）需要主動請求權限
                   needIOSPermission = typeof window.DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function';
+                  this.button.node.active = needIOSPermission;
                   if (!needIOSPermission) {
-                    _context.next = 6;
+                    _context.next = 5;
                     break;
                   }
                   // 若尚未取得授權，先不啟用，由使用者手勢觸發 requestIOSPermission()
                   this.log('⚠️ iOS 需要使用者手勢授權，請在按鈕點擊時呼叫 requestIOSPermission()。');
-                  _context.next = 5;
-                  return this.requestIOSPermission();
-                case 5:
                   return _context.abrupt("return");
-                case 6:
+                case 5:
                   input.setAccelerometerEnabled(true);
                   this._started = true;
                   this.log('✅ 加速度計已啟用（非 iOS 權限模式）。');
-                case 9:
+                case 8:
                 case "end":
                   return _context.stop();
               }
@@ -186,14 +187,21 @@ System.register("chunks:///_virtual/AccelExample.ts", ['./rollupPluginModLoBabel
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "shakeThreshold", [property], {
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "button", [_dec3], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "shakeThreshold", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 12;
         }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "shakeDebounceMs", [property], {
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "shakeDebounceMs", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
