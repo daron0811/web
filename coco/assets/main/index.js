@@ -72,17 +72,20 @@ System.register("chunks:///_virtual/AccelExample.ts", ['./rollupPluginModLoBabel
                   // 部分瀏覽器（iOS 13+）需要主動請求權限
                   needIOSPermission = typeof window.DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function';
                   if (!needIOSPermission) {
-                    _context.next = 4;
+                    _context.next = 6;
                     break;
                   }
                   // 若尚未取得授權，先不啟用，由使用者手勢觸發 requestIOSPermission()
                   this.log('⚠️ iOS 需要使用者手勢授權，請在按鈕點擊時呼叫 requestIOSPermission()。');
+                  _context.next = 5;
+                  return this.requestIOSPermission();
+                case 5:
                   return _context.abrupt("return");
-                case 4:
+                case 6:
                   input.setAccelerometerEnabled(true);
                   this._started = true;
                   this.log('✅ 加速度計已啟用（非 iOS 權限模式）。');
-                case 7:
+                case 9:
                 case "end":
                   return _context.stop();
               }
