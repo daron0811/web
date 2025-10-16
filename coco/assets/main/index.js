@@ -293,7 +293,7 @@ System.register("chunks:///_virtual/Countdown.ts", ['./rollupPluginModLoBabelHel
 });
 
 System.register("chunks:///_virtual/DescPanel.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './FadeGroup.ts', './MainGame01.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Button, Component, input, FadeGroup, MainGame01;
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Button, EventHandler, Component, FadeGroup, MainGame01;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
@@ -306,19 +306,22 @@ System.register("chunks:///_virtual/DescPanel.ts", ['./rollupPluginModLoBabelHel
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
       Button = module.Button;
+      EventHandler = module.EventHandler;
       Component = module.Component;
-      input = module.input;
     }, function (module) {
       FadeGroup = module.FadeGroup;
     }, function (module) {
       MainGame01 = module.MainGame01;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _class, _class2, _descriptor, _descriptor2, _descriptor3;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4;
       cclegacy._RF.push({}, "a8f986Ra1lEo4r9LypeqzAo", "DescPanel", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
-      var DescPanel = exports('DescPanel', (_dec = ccclass('DescPanel'), _dec2 = property(FadeGroup), _dec3 = property(Button), _dec4 = property(Boolean), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+      var DescPanel = exports('DescPanel', (_dec = ccclass('DescPanel'), _dec2 = property(FadeGroup), _dec3 = property(Button), _dec4 = property(Boolean), _dec5 = property({
+        type: [EventHandler],
+        tooltip: '全部對話結束後要呼叫的事件（可指到外部元件方法）'
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(DescPanel, _Component);
         function DescPanel() {
           var _this;
@@ -329,6 +332,7 @@ System.register("chunks:///_virtual/DescPanel.ts", ['./rollupPluginModLoBabelHel
           _initializerDefineProperty(_this, "fadeGroup", _descriptor, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "startBtn", _descriptor2, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "enableDeviceMotion", _descriptor3, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "onFinished", _descriptor4, _assertThisInitialized(_this));
           return _this;
         }
         var _proto = DescPanel.prototype;
@@ -339,54 +343,47 @@ System.register("chunks:///_virtual/DescPanel.ts", ['./rollupPluginModLoBabelHel
         _proto.onClickStart = /*#__PURE__*/function () {
           var _onClickStart = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
             var _this2 = this;
-            var perm, fadeGroup;
+            var fadeGroup;
             return _regeneratorRuntime().wrap(function _callee$(_context) {
               while (1) switch (_context.prev = _context.next) {
                 case 0:
-                  if (!this.enableDeviceMotion) {
-                    _context.next = 11;
-                    break;
-                  }
-                  _context.prev = 1;
-                  _context.next = 4;
-                  return DeviceMotionEvent.requestPermission();
-                case 4:
-                  perm = _context.sent;
-                  if (perm === 'granted') {
-                    input.setAccelerometerEnabled(true);
-                    console.log('✅ 已取得 iOS 權限並啟用加速度計。');
-                  } else {
-                    console.log('❌ 使用者拒絕了加速度計權限。');
-                  }
-                  _context.next = 11;
-                  break;
-                case 8:
-                  _context.prev = 8;
-                  _context.t0 = _context["catch"](1);
-                  console.log('❌ 請求 iOS 權限發生錯誤：' + _context.t0.message);
-                case 11:
+                  EventHandler.emitEvents(this.onFinished);
+                  // if (this.enableDeviceMotion) {
+                  //     try {
+                  //         const perm = await (DeviceMotionEvent as any).requestPermission();
+                  //         if (perm === 'granted') {
+                  //             input.setAccelerometerEnabled(true);
+                  //             console.log('✅ 已取得 iOS 權限並啟用加速度計。');
+                  //         } else {
+                  //             console.log('❌ 使用者拒絕了加速度計權限。');
+                  //         }
+                  //     } catch (e) {
+                  //         console.log('❌ 請求 iOS 權限發生錯誤：' + (e as Error).message);
+                  //     }
+                  // }
+
                   // 禁用按鈕，防止二次點擊
                   this.startBtn.interactable = false;
 
                   // 用類別取得，比字串穩
                   fadeGroup = this.getComponent(FadeGroup);
                   if (fadeGroup) {
-                    _context.next = 16;
+                    _context.next = 6;
                     break;
                   }
                   console.warn('[MainGame01] titlePage 上沒有掛 FadeGroup 元件');
                   return _context.abrupt("return");
-                case 16:
+                case 6:
                   fadeGroup.fadeOut(0.5, function () {
                     console.log('淡出完成');
                     MainGame01.instance.ShowGame();
                     _this2.node.active = false;
                   });
-                case 17:
+                case 7:
                 case "end":
                   return _context.stop();
               }
-            }, _callee, this, [[1, 8]]);
+            }, _callee, this);
           }));
           function onClickStart() {
             return _onClickStart.apply(this, arguments);
@@ -414,6 +411,13 @@ System.register("chunks:///_virtual/DescPanel.ts", ['./rollupPluginModLoBabelHel
         writable: true,
         initializer: function initializer() {
           return true;
+        }
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "onFinished", [_dec5], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return [];
         }
       })), _class2)) || _class));
       cclegacy._RF.pop();
