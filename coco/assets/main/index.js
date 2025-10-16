@@ -48,7 +48,7 @@ System.register("chunks:///_virtual/AccelExample.ts", ['./rollupPluginModLoBabel
         var _proto = AccelExample.prototype;
         _proto.onLoad = function onLoad() {
           // 嘗試自動啟用（iOS 可能需要使用者手勢授權）
-          this.startAccelerometer();
+          // this.startAccelerometer();
           this.button.node.on(Button.EventType.CLICK, this.requestIOSPermission, this);
         };
         _proto.onEnable = function onEnable() {
@@ -293,29 +293,32 @@ System.register("chunks:///_virtual/Countdown.ts", ['./rollupPluginModLoBabelHel
 });
 
 System.register("chunks:///_virtual/DescPanel.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './FadeGroup.ts', './MainGame01.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Button, Component, FadeGroup, MainGame01;
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Button, Component, input, FadeGroup, MainGame01;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
       _inheritsLoose = module.inheritsLoose;
       _initializerDefineProperty = module.initializerDefineProperty;
       _assertThisInitialized = module.assertThisInitialized;
+      _asyncToGenerator = module.asyncToGenerator;
+      _regeneratorRuntime = module.regeneratorRuntime;
     }, function (module) {
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
       Button = module.Button;
       Component = module.Component;
+      input = module.input;
     }, function (module) {
       FadeGroup = module.FadeGroup;
     }, function (module) {
       MainGame01 = module.MainGame01;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _class, _class2, _descriptor, _descriptor2;
+      var _dec, _dec2, _dec3, _dec4, _class, _class2, _descriptor, _descriptor2, _descriptor3;
       cclegacy._RF.push({}, "a8f986Ra1lEo4r9LypeqzAo", "DescPanel", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
-      var DescPanel = exports('DescPanel', (_dec = ccclass('DescPanel'), _dec2 = property(FadeGroup), _dec3 = property(Button), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+      var DescPanel = exports('DescPanel', (_dec = ccclass('DescPanel'), _dec2 = property(FadeGroup), _dec3 = property(Button), _dec4 = property(Boolean), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(DescPanel, _Component);
         function DescPanel() {
           var _this;
@@ -325,6 +328,7 @@ System.register("chunks:///_virtual/DescPanel.ts", ['./rollupPluginModLoBabelHel
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
           _initializerDefineProperty(_this, "fadeGroup", _descriptor, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "startBtn", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "enableDeviceMotion", _descriptor3, _assertThisInitialized(_this));
           return _this;
         }
         var _proto = DescPanel.prototype;
@@ -332,23 +336,63 @@ System.register("chunks:///_virtual/DescPanel.ts", ['./rollupPluginModLoBabelHel
           this.startBtn.interactable = true;
           this.startBtn.node.on(Button.EventType.CLICK, this.onClickStart, this);
         };
-        _proto.onClickStart = function onClickStart() {
-          var _this2 = this;
-          // 禁用按鈕，防止二次點擊
-          this.startBtn.interactable = false;
+        _proto.onClickStart = /*#__PURE__*/function () {
+          var _onClickStart = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            var _this2 = this;
+            var perm, fadeGroup;
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  if (!this.enableDeviceMotion) {
+                    _context.next = 11;
+                    break;
+                  }
+                  _context.prev = 1;
+                  _context.next = 4;
+                  return DeviceMotionEvent.requestPermission();
+                case 4:
+                  perm = _context.sent;
+                  if (perm === 'granted') {
+                    input.setAccelerometerEnabled(true);
+                    console.log('✅ 已取得 iOS 權限並啟用加速度計。');
+                  } else {
+                    console.log('❌ 使用者拒絕了加速度計權限。');
+                  }
+                  _context.next = 11;
+                  break;
+                case 8:
+                  _context.prev = 8;
+                  _context.t0 = _context["catch"](1);
+                  console.log('❌ 請求 iOS 權限發生錯誤：' + _context.t0.message);
+                case 11:
+                  // 禁用按鈕，防止二次點擊
+                  this.startBtn.interactable = false;
 
-          // 用類別取得，比字串穩
-          var fadeGroup = this.getComponent(FadeGroup);
-          if (!fadeGroup) {
-            console.warn('[MainGame01] titlePage 上沒有掛 FadeGroup 元件');
-            return;
+                  // 用類別取得，比字串穩
+                  fadeGroup = this.getComponent(FadeGroup);
+                  if (fadeGroup) {
+                    _context.next = 16;
+                    break;
+                  }
+                  console.warn('[MainGame01] titlePage 上沒有掛 FadeGroup 元件');
+                  return _context.abrupt("return");
+                case 16:
+                  fadeGroup.fadeOut(0.5, function () {
+                    console.log('淡出完成');
+                    MainGame01.instance.ShowGame();
+                    _this2.node.active = false;
+                  });
+                case 17:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee, this, [[1, 8]]);
+          }));
+          function onClickStart() {
+            return _onClickStart.apply(this, arguments);
           }
-          fadeGroup.fadeOut(0.5, function () {
-            console.log('淡出完成');
-            MainGame01.instance.ShowGame();
-            _this2.node.active = false;
-          });
-        };
+          return onClickStart;
+        }();
         return DescPanel;
       }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "fadeGroup", [_dec2], {
         configurable: true,
@@ -364,41 +408,73 @@ System.register("chunks:///_virtual/DescPanel.ts", ['./rollupPluginModLoBabelHel
         initializer: function initializer() {
           return null;
         }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "enableDeviceMotion", [_dec4], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return true;
+        }
       })), _class2)) || _class));
       cclegacy._RF.pop();
     }
   };
 });
 
-System.register("chunks:///_virtual/DialogPanel.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './FadeGroup.ts', './TypingText.ts', './MainGame01.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Animation, input, Input, Component, FadeGroup, TypingText, TypingEvents, MainGame01;
+System.register("chunks:///_virtual/DialogPanel.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Node, Label, JsonAsset, EventHandler, Input, input, Animation, Component, resources;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
       _inheritsLoose = module.inheritsLoose;
       _initializerDefineProperty = module.initializerDefineProperty;
       _assertThisInitialized = module.assertThisInitialized;
+      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
+      _asyncToGenerator = module.asyncToGenerator;
+      _regeneratorRuntime = module.regeneratorRuntime;
     }, function (module) {
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
-      Animation = module.Animation;
-      input = module.input;
+      Node = module.Node;
+      Label = module.Label;
+      JsonAsset = module.JsonAsset;
+      EventHandler = module.EventHandler;
       Input = module.Input;
+      input = module.input;
+      Animation = module.Animation;
       Component = module.Component;
-    }, function (module) {
-      FadeGroup = module.FadeGroup;
-    }, function (module) {
-      TypingText = module.TypingText;
-      TypingEvents = module.TypingEvents;
-    }, function (module) {
-      MainGame01 = module.MainGame01;
+      resources = module.resources;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9;
       cclegacy._RF.push({}, "8e7f4ZrfqNEIr+TG3S+t2+S", "DialogPanel", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
-      var DialogPanel = exports('DialogPanel', (_dec = ccclass('DialogPanel'), _dec2 = property(FadeGroup), _dec3 = property(Animation), _dec4 = property(FadeGroup), _dec5 = property(TypingText), _dec6 = property(String), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+      var DialogPanel = exports('DialogPanel', (_dec = ccclass('DialogPanel'), _dec2 = property({
+        type: Node,
+        tooltip: '全螢幕可點擊區域（通常是一個蓋滿畫面的透明節點）'
+      }), _dec3 = property({
+        type: Label,
+        tooltip: '顯示人物名稱的 Label'
+      }), _dec4 = property({
+        type: Label,
+        tooltip: '顯示對話內容的 Label（若沒有 TypingText，就用它 fallback）'
+      }), _dec5 = property({
+        type: Node,
+        tooltip: '放所有可演出的角色的根節點（其子節點名稱需與 JSON 的 playerNode 對上）'
+      }), _dec6 = property({
+        type: JsonAsset,
+        tooltip: '可直接把 Game1.json 拖進來；或留空走 resources.load 路徑'
+      }), _dec7 = property({
+        tooltip: 'resources 路徑（若上面 jsonAsset 留空，就用這個，如：Game1）'
+      }), _dec8 = property({
+        tooltip: '每個字出現的毫秒間隔（fallback 打字用）'
+      }), _dec9 = property({
+        type: [EventHandler],
+        tooltip: '全部對話結束後要呼叫的事件（可指到外部元件方法）'
+      }), _dec10 = property({
+        tooltip: '可選：若使用你現有的 TypingText，丟上來就能用；不填則自動用 Label fallback'
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(DialogPanel, _Component);
         function DialogPanel() {
           var _this;
@@ -406,111 +482,363 @@ System.register("chunks:///_virtual/DialogPanel.ts", ['./rollupPluginModLoBabelH
             args[_key] = arguments[_key];
           }
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          _initializerDefineProperty(_this, "fadeGroup", _descriptor, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "playerAnim", _descriptor2, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "dialogBox", _descriptor3, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "dialogNode", _descriptor4, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "dialogText", _descriptor5, _assertThisInitialized(_this));
+          // ====== 指派區（在 Editor 指到你的節點/元件） ======
+          _initializerDefineProperty(_this, "clickArea", _descriptor, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "nameLabel", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "dialogLabel", _descriptor3, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "playersRoot", _descriptor4, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "jsonAsset", _descriptor5, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "jsonPath", _descriptor6, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "typingIntervalMs", _descriptor7, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "onFinished", _descriptor8, _assertThisInitialized(_this));
+          // ====== （可選）掛你的 TypingText 元件 ======
+          // 若你有現成的 TypingText.ts，並有 play(text, onComplete) / skip() / isTyping 等 API，就綁上
+          _initializerDefineProperty(_this, "typingTextComp", _descriptor9, _assertThisInitialized(_this));
+          // 不知道你的型別就先 any
+          // ====== 內部狀態 ======
+          _this.sequence = [];
+          // 扁平化後的台詞序列
+          _this.idx = -1;
+          _this.isBusy = false;
+          // 正在播動畫或打字時，點擊行為（跳字 or 忽略）
+          _this.typingTimer = null;
+          // fallback 打字用
+          // 預設動畫 clip 名稱（你可照場景實際命名調整）
+          _this.CLIP_WALK_IN = 'walkIn';
+          _this.CLIP_TALK = 'talk';
+          _this.CLIP_IDLE = 'idle';
           return _this;
         }
         var _proto = DialogPanel.prototype;
+        // ----------
+        // 生命週期
+        // ----------
         _proto.onLoad = function onLoad() {
-          if (!this.fadeGroup) {
-            this.fadeGroup = this.getComponent(FadeGroup);
+          // 綁全畫面點擊
+          if (this.clickArea) {
+            this.clickArea.on(Input.EventType.TOUCH_START, this.onClick, this);
+          } else {
+            // 若沒指定，直接監聽全域（退而求其次）
+            input.on(Input.EventType.TOUCH_START, this.onClick, this);
           }
-          this.show();
         };
-        _proto.show = function show() {
-          var _this$dialogNode,
-            _this2 = this;
-          console.log("DialogPanel show");
-          (_this$dialogNode = this.dialogNode) == null || _this$dialogNode.clearText();
-          this.node.active = true;
-          this.fadeGroup.uiOpacity.opacity = 0;
-          this.fadeGroup.fadeIn(2.0, function () {
-            _this2.playerAnim.play("FadeIn");
-
-            // 監聽一次動畫完成
-            _this2.playerAnim.once(Animation.EventType.FINISHED, function () {
-              _this2.dialogBox.uiOpacity.opacity = 0;
-              _this2.dialogBox.fadeIn(1.0, function () {
-                console.log("Dialog FadeIn 完成");
-                _this2.setDialogText();
-              });
-            }, _this2);
-          });
-        };
-        _proto.setDialogText = function setDialogText() {
-          // this.dialogNode!.charsPerSecond = 28;
-          this.dialogNode.bus.on(TypingEvents.LINE_DONE, this.onLineDone, this);
-          this.dialogNode.bus.on(TypingEvents.ALL_DONE, this.onAllDone, this);
-          this.dialogNode.playLines([this.dialogText.toString()]);
-        };
-        _proto.onLineDone = function onLineDone() {/* 顯示「下一句」按鈕，或自動延遲進下一句（這裡已自動） */};
-        _proto.onAllDone = function onAllDone() {
-          /* 對接你的 FSM：切到 HowTo 或 Playing 等狀態 */
-
-          input.on(Input.EventType.TOUCH_START, this.onAnyTouch, this);
-
-          // 如果要支援滑鼠，也可加上 MOUSE_DOWN
-          input.on(Input.EventType.MOUSE_DOWN, this.onAnyTouch, this);
-        };
-        _proto.onAnyTouch = function onAnyTouch(event) {
-          console.log("螢幕被點擊，進到下一步");
-          this.goNext();
-        };
-        _proto.goNext = function goNext() {
-          var _this3 = this;
-          // 這裡可以呼叫你的 DialogPanel.next() 或切換場景
-          input.off(Input.EventType.TOUCH_START, this.onAnyTouch, this);
-          input.off(Input.EventType.MOUSE_DOWN, this.onAnyTouch, this);
-          this.fadeGroup.fadeOut(0.5, function () {
-            console.log('淡出完成');
-            MainGame01.instance.ShowDesc();
-            _this3.node.active = false;
-          });
-        };
+        _proto.start = /*#__PURE__*/function () {
+          var _start = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return this.loadScenario();
+                case 2:
+                  // 載入 JSON → this.sequence
+                  this.idx = -1;
+                  // 立刻進入第一段（先播入場動畫，再開始說話）
+                  this.nextSegment(true);
+                case 4:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee, this);
+          }));
+          function start() {
+            return _start.apply(this, arguments);
+          }
+          return start;
+        }();
         _proto.onDestroy = function onDestroy() {
-          input.off(Input.EventType.TOUCH_START, this.onAnyTouch, this);
-          input.off(Input.EventType.MOUSE_DOWN, this.onAnyTouch, this);
+          if (this.clickArea) {
+            this.clickArea.off(Input.EventType.TOUCH_START, this.onClick, this);
+          } else {
+            input.off(Input.EventType.TOUCH_START, this.onClick, this);
+          }
+          this.stopTypingFallback();
+        }
+
+        // ----------
+        // 載入與整理資料
+        // ----------
+        ;
+
+        _proto.loadScenario = /*#__PURE__*/
+        function () {
+          var _loadScenario = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+            var _this2 = this;
+            var data, keys, seq, _iterator, _step, k, block, name, playerNode, lines, _iterator2, _step2, text;
+            return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+              while (1) switch (_context2.prev = _context2.next) {
+                case 0:
+                  if (!this.jsonAsset) {
+                    _context2.next = 4;
+                    break;
+                  }
+                  data = this.jsonAsset.json;
+                  _context2.next = 7;
+                  break;
+                case 4:
+                  _context2.next = 6;
+                  return new Promise(function (resolve, reject) {
+                    resources.load(_this2.jsonPath, JsonAsset, function (err, asset) {
+                      if (err) {
+                        reject(err);
+                        return;
+                      }
+                      resolve(asset.json);
+                    });
+                  });
+                case 6:
+                  data = _context2.sent;
+                case 7:
+                  // 你的 Game1.json 是物件索引（"0","1",...），每個含 {name, playerNode, dialog[]}
+                  // 轉成扁平序列：[{name, playerNode, text}, ...]
+                  keys = Object.keys(data).sort(function (a, b) {
+                    return Number(a) - Number(b);
+                  });
+                  seq = [];
+                  for (_iterator = _createForOfIteratorHelperLoose(keys); !(_step = _iterator()).done;) {
+                    k = _step.value;
+                    block = data[k];
+                    name = block.name;
+                    playerNode = block.playerNode;
+                    lines = block.dialog || [];
+                    for (_iterator2 = _createForOfIteratorHelperLoose(lines); !(_step2 = _iterator2()).done;) {
+                      text = _step2.value;
+                      seq.push({
+                        name: name,
+                        playerNode: playerNode,
+                        text: text
+                      });
+                    }
+                  }
+                  this.sequence = seq;
+                case 11:
+                case "end":
+                  return _context2.stop();
+              }
+            }, _callee2, this);
+          }));
+          function loadScenario() {
+            return _loadScenario.apply(this, arguments);
+          }
+          return loadScenario;
+        }() // ----------
+        // 全畫面點擊
+        // ----------
+        ;
+
+        _proto.onClick = function onClick(e) {
+          if (!this.sequence.length) return;
+
+          // 若正在打字：先 skip 完整顯示
+          if (this.typingTextComp && this.typingTextComp.isTyping) {
+            var _this$typingTextComp$, _this$typingTextComp;
+            (_this$typingTextComp$ = (_this$typingTextComp = this.typingTextComp).skip) == null || _this$typingTextComp$.call(_this$typingTextComp);
+            return;
+          }
+          if (this.typingTimer) {
+            // fallback 打字 → 立即顯示完整文字
+            this.finishTypingFallback();
+            return;
+          }
+
+          // 進入下一段
+          this.nextSegment(false);
+        }
+
+        // ----------
+        // 切到下一段（或第一次進入）
+        // ----------
+        ;
+
+        _proto.nextSegment = function nextSegment(isFirst) {
+          var _entry$name,
+            _this3 = this;
+          if (this.isBusy) return;
+          this.idx++;
+          if (this.idx >= this.sequence.length) {
+            // 全部結束：發 callback
+            EventHandler.emitEvents(this.onFinished);
+            return;
+          }
+          var entry = this.sequence[this.idx];
+          this.isBusy = true;
+
+          // 1) 顯示正確角色、名稱文字
+          this.updateActivePlayer(entry.playerNode);
+          if (this.nameLabel) this.nameLabel.string = (_entry$name = entry.name) != null ? _entry$name : '';
+
+          // 2) 初次進入或每段都可先走入（如果需要每句都 walkIn，可以移除此判斷）
+          var node = this.findPlayer(entry.playerNode);
+          var anim = (node == null ? void 0 : node.getComponent(Animation)) || null;
+
+          // 入場 → 入場完才開始說話
+          var playWalkIn = isFirst && anim && this.hasState(anim, this.CLIP_WALK_IN);
+          if (playWalkIn) {
+            anim.once(Animation.EventType.FINISHED, function () {
+              _this3.startTalking(entry, anim);
+            }, this);
+            anim.play(this.CLIP_WALK_IN);
+          } else {
+            this.startTalking(entry, anim);
+          }
+        }
+
+        // ----------
+        // 開始說話（可接 talk/idle 動畫）
+        // ----------
+        ;
+
+        _proto.startTalking = function startTalking(entry, anim) {
+          var _entry$text,
+            _this4 = this;
+          // 播放 talk（若有）
+          if (anim && this.hasState(anim, this.CLIP_TALK)) {
+            anim.play(this.CLIP_TALK);
+          }
+
+          // 打字顯示
+          var text = (_entry$text = entry.text) != null ? _entry$text : '';
+          if (this.typingTextComp && typeof this.typingTextComp.play === 'function') {
+            // 走你現有的 TypingText API
+            this.typingTextComp.play(text, function () {
+              // 說完後可切 idle
+              if (anim && _this4.hasState(anim, _this4.CLIP_IDLE)) anim.play(_this4.CLIP_IDLE);
+              _this4.isBusy = false;
+            });
+          } else {
+            // fallback：用 Label 一個字一個字顯示
+            this.playTypingFallback(text, function () {
+              if (anim && _this4.hasState(anim, _this4.CLIP_IDLE)) anim.play(_this4.CLIP_IDLE);
+              _this4.isBusy = false;
+            });
+          }
+        }
+
+        // ----------
+        // 角色顯示切換 & 尋找
+        // ----------
+        ;
+
+        _proto.updateActivePlayer = function updateActivePlayer(playerNodeName) {
+          if (!this.playersRoot) return;
+          var children = this.playersRoot.children;
+          for (var _iterator3 = _createForOfIteratorHelperLoose(children), _step3; !(_step3 = _iterator3()).done;) {
+            var c = _step3.value;
+            c.active = c.name === playerNodeName;
+          }
         };
-        _proto.start = function start() {};
-        _proto.update = function update(deltaTime) {};
+        _proto.findPlayer = function findPlayer(playerNodeName) {
+          if (!this.playersRoot) return null;
+          return this.playersRoot.getChildByName(playerNodeName);
+        };
+        _proto.hasState = function hasState(anim, clipName) {
+          try {
+            return !!anim.getState(clipName);
+          } catch (_unused) {
+            return false;
+          }
+        }
+
+        // ----------
+        // fallback 打字（若未使用 TypingText）
+        // ----------
+        ;
+
+        _proto.playTypingFallback = function playTypingFallback(full, onDone) {
+          var _this5 = this;
+          if (!this.dialogLabel) {
+            // 沒 Label 就直接結束
+            onDone && onDone();
+            return;
+          }
+          this.stopTypingFallback();
+          this.dialogLabel.string = '';
+          var chars = Array.from(full);
+          var i = 0;
+          this.typingTimer = setInterval(function () {
+            if (i >= chars.length) {
+              _this5.finishTypingFallback(onDone);
+              return;
+            }
+            _this5.dialogLabel.string += chars[i++];
+          }, Math.max(1, this.typingIntervalMs));
+        };
+        _proto.finishTypingFallback = function finishTypingFallback(onDone) {
+          if (!this.dialogLabel) return;
+          this.stopTypingFallback();
+          // 直接補滿（確保完整顯示當前句）
+          var current = this.sequence[this.idx];
+          if ((current == null ? void 0 : current.text) != null) this.dialogLabel.string = current.text;
+          onDone && onDone();
+        };
+        _proto.stopTypingFallback = function stopTypingFallback() {
+          if (this.typingTimer) {
+            clearInterval(this.typingTimer);
+            this.typingTimer = null;
+          }
+        };
         return DialogPanel;
-      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "fadeGroup", [_dec2], {
+      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "clickArea", [_dec2], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "playerAnim", [_dec3], {
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "nameLabel", [_dec3], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "dialogBox", [_dec4], {
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "dialogLabel", [_dec4], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "dialogNode", [_dec5], {
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "playersRoot", [_dec5], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "dialogText", [_dec6], {
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "jsonAsset", [_dec6], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return "";
+          return null;
+        }
+      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "jsonPath", [_dec7], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 'Game1';
+        }
+      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "typingIntervalMs", [_dec8], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 18;
+        }
+      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "onFinished", [_dec9], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return [];
+        }
+      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "typingTextComp", [_dec10], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
         }
       })), _class2)) || _class));
       cclegacy._RF.pop();
@@ -760,6 +1088,8 @@ System.register("chunks:///_virtual/FadeGroup.ts", ['./rollupPluginModLoBabelHel
       cclegacy._RF.push({}, "b7389kiXWxN1ov64R16vEZF", "FadeGroup", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
+
+      //整個頁面(包括子物件)淡入淡出使用，這個物件要掛UIOpacity
       var FadeGroup = exports('FadeGroup', (_dec = ccclass('FadeGroup'), _dec2 = property(UIOpacity), _dec3 = property(Number), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(FadeGroup, _Component);
         function FadeGroup() {
@@ -907,6 +1237,7 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
       cclegacy._RF.push({}, "45d49rPkZpCUb3+vvEPIhdb", "GamePanel", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
+      //遊戲頁面
       var GamePanel = exports('GamePanel', (_dec = ccclass('GamePanel'), _dec2 = property({
         type: Sprite
       }), _dec3 = property({
@@ -956,6 +1287,17 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
         _proto.setLog = function setLog(msg) {
           if (this.logLabel) this.logLabel.string = msg;
         };
+        _proto.onEnable = function onEnable() {
+          // 監聽加速度
+          this.bindMotionListener();
+        };
+        _proto.onDisable = function onDisable() {
+          this.unbindMotionListener();
+          // input.off(Input.EventType.DEVICEMOTION, this.onDeviceMotion, this);
+          // input.setAccelerometerEnabled(false);
+          // this._started = false;
+        };
+
         _proto.bindMotionListener = function bindMotionListener() {
           if (this.motionBound) return;
           if (typeof window !== 'undefined' && 'ondevicemotion' in window) {
@@ -977,16 +1319,7 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
 
           // 顯示開始面板，等待使用者點擊
           // if (this.startPanel) this.startPanel.active = true;
-        };
-
-        _proto.onEnable = function onEnable() {
-          this.onClickStart();
         }
-
-        // start() {
-        //     //初始就開始遊戲
-        //     this.onClickStart();
-        // }
 
         // Start 按鈕的 onClick 綁這個方法
         ;
@@ -1193,7 +1526,7 @@ System.register("chunks:///_virtual/GamePanel.ts", ['./rollupPluginModLoBabelHel
   };
 });
 
-System.register("chunks:///_virtual/main", ['./EnvCheck.ts', './GamePanel.ts', './MainGame01.ts', './DialogueExample.ts', './DescPanel.ts', './DialogPanel.ts', './FailPanel.ts', './AccelExample.ts', './Countdown.ts', './StateMachine.ts', './UseState.ts', './TypingText.ts', './FadeGroup.ts'], function () {
+System.register("chunks:///_virtual/main", ['./EnvCheck.ts', './MainGame01.ts', './DescPanel.ts', './DialogPanel.ts', './FailPanel.ts', './GamePanel.ts', './AccelExample.ts', './Countdown.ts', './StateMachine.ts', './UseState.ts', './DialogueExample.ts', './TypingText.ts', './FadeGroup.ts'], function () {
   return {
     setters: [null, null, null, null, null, null, null, null, null, null, null, null, null],
     execute: function () {}
@@ -1224,6 +1557,8 @@ System.register("chunks:///_virtual/MainGame01.ts", ['./rollupPluginModLoBabelHe
       cclegacy._RF.push({}, "f6f104OsZtKtpZrrcDM1Sn3", "MainGame01", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
+
+      //第一款遊戲的主邏輯設定
       var MainGame01 = exports('MainGame01', (_dec = ccclass('MainGame01'), _dec2 = property(Node), _dec3 = property(Button), _dec4 = property(Node), _dec5 = property(Node), _dec6 = property(Node), _dec7 = property(Node), _dec8 = property(Node), _dec(_class = (_class2 = (_class3 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(MainGame01, _Component);
         function MainGame01() {
@@ -1303,11 +1638,13 @@ System.register("chunks:///_virtual/MainGame01.ts", ['./rollupPluginModLoBabelHe
           });
         };
         _proto.ShowDesc = function ShowDesc() {
+          this.storyPage.active = false;
           this.descPage.active = true;
           var fadeGroup = this.descPage.getComponent(FadeGroup);
           fadeGroup.fadeIn(2.0);
         };
         _proto.ShowGame = function ShowGame() {
+          // this.storyPage.active = false;
           this.gamePage.active = true;
           // const fadeGroup = this.gamePage.getComponent(FadeGroup);
           // fadeGroup.fadeIn(2.0);

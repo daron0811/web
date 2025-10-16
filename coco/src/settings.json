@@ -38,6 +38,9 @@
         "subpackages": [],
         "preloadBundles": [
             {
+                "bundle": "resources"
+            },
+            {
                 "bundle": "main"
             }
         ],
@@ -45,6 +48,7 @@
         "preloadAssets": [],
         "projectBundles": [
             "internal",
+            "resources",
             "main"
         ],
         "downloadMaxConcurrency": 15
@@ -58,7 +62,7 @@
         ]
     },
     "launch": {
-        "launchScene": "db://assets/Scenes/exampleScene.scene"
+        "launchScene": "db://assets/Scenes/GameScene.scene"
     },
     "screen": {
         "exactFitScreen": true,
