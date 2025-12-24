@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/web/madou/inmind/static/css/main.8f9531de.css",
-    "main.js": "/web/madou/inmind/static/js/main.4bbd9ea9.js",
+    "main.css": "/web/madou/inmind/static/css/main.4b2f1807.css",
+    "main.js": "/web/madou/inmind/static/js/main.e3e973cc.js",
     "index.html": "/web/madou/inmind/index.html",
-    "main.8f9531de.css.map": "/web/madou/inmind/static/css/main.8f9531de.css.map",
-    "main.4bbd9ea9.js.map": "/web/madou/inmind/static/js/main.4bbd9ea9.js.map"
+    "main.4b2f1807.css.map": "/web/madou/inmind/static/css/main.4b2f1807.css.map",
+    "main.e3e973cc.js.map": "/web/madou/inmind/static/js/main.e3e973cc.js.map"
   },
   "entrypoints": [
-    "static/css/main.8f9531de.css",
-    "static/js/main.4bbd9ea9.js"
+    "static/css/main.4b2f1807.css",
+    "static/js/main.e3e973cc.js"
   ]
 }
