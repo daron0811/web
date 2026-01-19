@@ -1,39 +1,112 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
+<head>
+  <meta charset="utf-8">
 
-    <title>Cocos Creator | MD-Tunnel</title>
+  <title>Cocos Creator | MD-Tunnel</title>
 
-    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="mobile-web-app-capable" content="yes"/>
-    <meta name="full-screen" content="yes"/>
-    <meta name="screen-orientation" content="portrait"/>
-    <meta name="x5-fullscreen" content="true"/>
-    <meta name="360-fullscreen" content="true"/>
+  <meta name="viewport"
+        content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true"/>
 
-    <meta name="renderer" content="webkit"/>
-    <meta name="force-rendering" content="webkit"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
 
-    <link rel="stylesheet" type="text/css" href="./style.css"/>
-    <link rel="icon" href="favicon.ico"/>
-  </head>
-  <body>
-    <h1 class="header">MD-Tunnel</h1>
+  <meta name="renderer" content="webkit"/>
+  <meta name="force-rendering" content="webkit"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="msapplication-tap-highlight" content="no">
 
-    <div id="GameDiv" cc_exact_fit_screen="false" style="width: 1280px; height: 960px;">
-      <div id="Cocos3dGameContainer">
-        <canvas id="GameCanvas" width="1280" height="960" tabindex="99"></canvas>
-      </div>
+  <meta name="full-screen" content="yes"/>
+  <meta name="x5-fullscreen" content="true"/>
+  <meta name="360-fullscreen" content="true"/>
+  <meta name="x5-page-mode" content="app">
+
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+
+<body>
+  <div id="GameDiv" cc_exact_fit_screen="true">
+    <div id="Cocos3dGameContainer">
+      <canvas id="GameCanvas"
+              oncontextmenu="event.preventDefault()"
+              tabindex="99"></canvas>
     </div>
-    <p class="footer">
-      Created with <a href="https://www.cocos.com/products" title="Cocos Creator">Cocos Creator</a>
-    </p>
-    <!-- Polyfills bundle. -->
+  </div>
 
-<script src="src/polyfills.bundle.js" charset="utf-8"> </script>    
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    
+    // 👇 [NEW] 新增：引入 Auth 相關功能
+    import { 
+      getAuth, 
+      signInAnonymously 
+    } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+    import {
+      getDatabase,
+      ref,
+      push,
+      set,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+    const firebaseConfig = {
+		apiKey: "AIzaSyC7udEN-Jdxw3_mNbpMSUBV6LQ743rp5-4",
+		authDomain: "madou-tunnel.firebaseapp.com",
+		databaseURL: "https://madou-tunnel-default-rtdb.asia-southeast1.firebasedatabase.app",
+		projectId: "madou-tunnel",
+		storageBucket: "madou-tunnel.firebasestorage.app",
+		messagingSenderId: "786743617812",
+		appId: "1:786743617812:web:cf6f49040a2f4016ddfa01"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    
+    // 👇 [NEW] 新增：初始化 Auth 並執行匿名登入
+    const auth = getAuth(app);
+    signInAnonymously(auth)
+      .then(() => {
+        console.log('[Firebase] Web 端匿名登入成功！');
+      })
+      .catch((error) => {
+        console.error('[Firebase] 登入失敗：', error);
+      });
+
+    // 🔥 對外橋接給 Cocos 使用
+    window.__firebaseReady = true;
+    window.firebaseService = {
+      async sendMessage(type, text) {
+        // 👇 [建議] 檢查是否已登入，雖然 Firebase SDK 會自動處理 token，但這樣比較保險
+        if (!auth.currentUser) {
+            console.warn('[Firebase] 尚未登入，無法發送訊息');
+            return null;
+        }
+
+        const msg = (text || '').trim();
+        if (!msg) return null;
+
+        const listRef = ref(db, `messages/${type}`);
+        const newRef = push(listRef);
+        await set(newRef, {
+          text: msg,
+          createdAt: serverTimestamp()
+        });
+        return newRef.key;
+      }
+    };
+
+    console.log('[Firebase] ready');
+  </script>
+
+  <!-- ⚠️ 這一行一定要留在最後 -->
+  
+
+<!-- Polyfills bundle. -->
+
+<script src="src/polyfills.bundle.js" charset="utf-8"> </script>
 
 
 <!-- SystemJS support. -->
@@ -45,5 +118,6 @@
 <script>
     System.import('./index.js').catch(function(err) { console.error(err); })
 </script>
-  </body>
+
+</body>
 </html>
