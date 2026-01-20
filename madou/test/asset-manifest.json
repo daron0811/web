@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/web/madou/inmind/static/css/main.0de1b19d.css",
+    "main.js": "/web/madou/inmind/static/js/main.01d14e4b.js",
+    "index.html": "/web/madou/inmind/index.html",
+    "main.0de1b19d.css.map": "/web/madou/inmind/static/css/main.0de1b19d.css.map",
+    "main.01d14e4b.js.map": "/web/madou/inmind/static/js/main.01d14e4b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0de1b19d.css",
+    "static/js/main.01d14e4b.js"
+  ]
+}
