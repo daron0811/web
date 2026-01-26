@@ -1,57 +1,92 @@
 <div id="mindar-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;">
-</div>
-
-<div id="GameDiv" cc_exact_fit_screen="true">
-    <div id="Cocos3dGameContainer">
-      <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
-    </div>
+    <video id="mindar-video" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>
 </div>
 
 <script type="module">
-  // 直接從 CDN import 需要的 Controller 類別
   import { Controller } from 'https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image.prod.js';
 
-  window.addEventListener('load', () => {
+  window.addEventListener('load', async () => {
     
-    // 1. 初始化 Controller (注意：這邊直接用 Controller，不用 window.MINDAR)
+    // 1. 初始化 Controller
     const mindarController = new Controller({
       imageTargetSrc: './targets.mind', 
       maxTrack: 1, 
+      // 可以在這裡設定 filterMinCF, filterBeta 來減少抖動
+      filterMinCF: 0.001, 
+      filterBeta: 1000,
     });
 
-    const startAR = async () => {
-      const container = document.querySelector("#mindar-container");
-      
-      try {
-        // 2. Setup 會回傳建立好的 video 元素
-        const { video, dimensions } = await mindarController.setup(container);
-        
-        // 3. 等待影片播放
-        await video.play();
-        
-        // 4. 開始處理影像辨識
-        mindarController.processVideo(video);
+    const videoElement = document.getElementById('mindar-video');
 
-        // 5. 每一幀更新時觸發
-        mindarController.onUpdate = (renderInfo) => {
-          const anchor = mindarController.getAnchor(0); // 取得第一個識別圖的資訊
-          
-          // 發送 CustomEvent 給 Cocos Creator
-          const event = new CustomEvent('mindar-update', {
-            detail: {
-              visible: anchor && anchor.visible,
-              matrix: anchor ? anchor.matrix : null
-            }
-          });
-          window.dispatchEvent(event);
-        };
-      } catch (error) {
-        console.error("MindAR 啟動失敗:", error);
+    // 2. 手動開啟鏡頭的函式
+    const startCamera = async () => {
+      try {
+        // 請求鏡頭權限 (使用後鏡頭 environment)
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { 
+            facingMode: 'environment' 
+          },
+          audio: false
+        });
+
+        videoElement.srcObject = stream;
+        
+        // 等待影片載入完成
+        await new Promise((resolve) => {
+          videoElement.onloadedmetadata = () => {
+            videoElement.play();
+            resolve();
+          };
+        });
+        
+        return videoElement;
+      } catch (err) {
+        console.error("無法開啟鏡頭:", err);
+        alert("無法開啟鏡頭，請確認瀏覽器權限或是否使用 HTTPS");
+        throw err;
       }
+    };
+
+    // 3. 啟動 AR 流程
+    const startAR = async () => {
+        try {
+            await startCamera(); // 等待鏡頭開啟
+
+            // 取得影片實際尺寸，告訴 Controller
+            const { videoWidth, videoHeight } = videoElement;
+            
+            // ★ 關鍵修正：Raw Controller 使用 processVideo 來啟動運算
+            // 它沒有 setup 方法，直接餵影片給它
+            await mindarController.processVideo(videoElement);
+
+            // 4. 監聽更新 (每一幀)
+            mindarController.onUpdate = (data) => {
+                // data 包含 type: 'update'
+                const anchor = mindarController.getAnchor(0); // 取得第一個圖
+                
+                if (anchor && anchor.visible) {
+                    const event = new CustomEvent('mindar-update', {
+                        detail: {
+                            visible: true,
+                            matrix: anchor.matrix
+                        }
+                    });
+                    window.dispatchEvent(event);
+                } else {
+                    const event = new CustomEvent('mindar-update', {
+                        detail: { visible: false }
+                    });
+                    window.dispatchEvent(event);
+                }
+            };
+
+        } catch (error) {
+            console.error("MindAR 啟動失敗:", error);
+        }
     }
 
-    // 建議：你可以做一個 "Start AR" 的按鈕讓使用者點擊後再執行 startAR()
-    // 這樣可以避免 iOS Safari 阻擋自動播放 Video
+    // 執行
+    // 建議：如果是 iOS，最好做一個按鈕讓使用者點擊後才呼叫 startAR()
     startAR();
   });
 </script>
