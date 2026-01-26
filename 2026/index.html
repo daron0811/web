@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Cocos Creator | 2026_tibe</title>
+
+  <meta name="viewport"
+        content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true"/>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+
+  <meta name="renderer" content="webkit"/>
+  <meta name="force-rendering" content="webkit"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <meta name="full-screen" content="yes"/>
+  <meta name="x5-fullscreen" content="true"/>
+  <meta name="360-fullscreen" content="true"/>
+
+  <meta name="x5-page-mode" content="app">
+
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image.prod.js"></script>
+
+  <style>
+    body {
+      background-color: transparent !important;
+    }
+    #GameDiv, #Cocos3dGameContainer {
+      background-color: transparent !important;
+    }
+  </style>
+
+</head>
+<body>
+  
+  <div id="mindar-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;">
+  </div>
+
+  <div id="GameDiv" cc_exact_fit_screen="true">
+      <div id="Cocos3dGameContainer">
+        <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+      </div>
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      
+      // 這裡假設你的 targets.mind 檔案會在構建後放在根目錄
+      const mindarThree = new window.MINDAR.IMAGE.Controller({
+        imageTargetSrc: './targets.mind', 
+        maxTrack: 1, // 最多同時追蹤幾個目標
+      });
+
+      const startAR = async () => {
+        const container = document.querySelector("#mindar-container");
+        
+        try {
+          const {dimensions} = await mindarThree.setup(container);
+          
+          await mindarThree.dummyOpencvVideo.play();
+          mindarThree.processVideo(mindarThree.dummyOpencvVideo);
+
+          // 每一幀更新時觸發
+          mindarThree.onUpdate = (renderInfo) => {
+            const anchor = mindarThree.getAnchor(0); // 取得第一個識別圖的資訊
+            
+            // 發送 CustomEvent 給 Cocos Creator
+            // Cocos 裡的腳本可以透過 window.addEventListener('mindar-update', ...) 接收
+            const event = new CustomEvent('mindar-update', {
+              detail: {
+                visible: anchor && anchor.visible,
+                matrix: anchor ? anchor.matrix : null
+              }
+            });
+            window.dispatchEvent(event);
+          };
+        } catch (error) {
+          console.error("MindAR 啟動失敗:", error);
+        }
+      }
+
+      // 自動啟動 AR
+      // 注意：某些瀏覽器可能需要使用者點擊按鈕才能播放 Video，建議實作一個 Start 按鈕
+      startAR();
+    });
+  </script>
+
+  
+
+<!-- Polyfills bundle. -->
+
+<script src="src/polyfills.bundle.js" charset="utf-8"> </script>
+
+
+<!-- SystemJS support. -->
+<script src="src/system.bundle.js" charset="utf-8"> </script>
+
+<!-- Import map -->
+<script src="src/import-map.json" type="systemjs-importmap" charset="utf-8"> </script>
+
+<script>
+    System.import('./index.js').catch(function(err) { console.error(err); })
+</script>
+
+</body>
+</html>
