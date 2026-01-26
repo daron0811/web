@@ -2,67 +2,71 @@
     <video id="mindar-video" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>
 </div>
 
+<div id="GameDiv" cc_exact_fit_screen="true">
+    <div id="Cocos3dGameContainer">
+      <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+    </div>
+</div>
+
 <script type="module">
   import { Controller } from 'https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image.prod.js';
 
-  window.addEventListener('load', async () => {
-    
-    // 1. 初始化 Controller
-    const mindarController = new Controller({
-      imageTargetSrc: './targets.mind', 
-      maxTrack: 1, 
-      // 可以在這裡設定 filterMinCF, filterBeta 來減少抖動
-      filterMinCF: 0.001, 
-      filterBeta: 1000,
-    });
+  window.addEventListener('load', () => {
 
     const videoElement = document.getElementById('mindar-video');
-
-    // 2. 手動開啟鏡頭的函式
+    
+    // 步驟 1: 開啟攝影機的函式
     const startCamera = async () => {
-      try {
-        // 請求鏡頭權限 (使用後鏡頭 environment)
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { 
-            facingMode: 'environment' 
-          },
-          audio: false
-        });
+      // 請求後鏡頭權限
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { 
+          facingMode: 'environment' 
+        },
+        audio: false
+      });
 
-        videoElement.srcObject = stream;
-        
-        // 等待影片載入完成
-        await new Promise((resolve) => {
-          videoElement.onloadedmetadata = () => {
-            videoElement.play();
-            resolve();
-          };
-        });
-        
-        return videoElement;
-      } catch (err) {
-        console.error("無法開啟鏡頭:", err);
-        alert("無法開啟鏡頭，請確認瀏覽器權限或是否使用 HTTPS");
-        throw err;
-      }
+      videoElement.srcObject = stream;
+      
+      // 等待 metadata 載入，確保我們能拿到 videoWidth/videoHeight
+      return new Promise((resolve) => {
+        videoElement.onloadedmetadata = () => {
+          videoElement.play();
+          resolve(videoElement);
+        };
+      });
     };
 
-    // 3. 啟動 AR 流程
+    // 步驟 2: 主啟動流程
     const startAR = async () => {
         try {
-            await startCamera(); // 等待鏡頭開啟
-
-            // 取得影片實際尺寸，告訴 Controller
-            const { videoWidth, videoHeight } = videoElement;
+            console.log("正在開啟攝影機...");
+            await startCamera(); 
             
-            // ★ 關鍵修正：Raw Controller 使用 processVideo 來啟動運算
-            // 它沒有 setup 方法，直接餵影片給它
+            // ★ 關鍵修正：拿到攝影機尺寸後，才初始化 Controller
+            const { videoWidth, videoHeight } = videoElement;
+            console.log(`攝影機尺寸: ${videoWidth}x${videoHeight}`);
+
+            const mindarController = new Controller({
+                inputWidth: videoWidth,
+                inputHeight: videoHeight,
+                maxTrack: 1, 
+                // 減少抖動參數
+                filterMinCF: 0.0001, 
+                filterBeta: 0.001,
+            });
+
+            // ★ 步驟 3: 手動載入識別圖並等待完成
+            console.log("正在載入識別圖...");
+            const { dimensions } = await mindarController.addImageTargets('./targets.mind');
+            console.log("識別圖載入完成", dimensions);
+
+            // ★ 步驟 4: 開始處理影像
+            console.log("開始 AR 運算...");
             await mindarController.processVideo(videoElement);
 
-            // 4. 監聽更新 (每一幀)
+            // 監聽更新
             mindarController.onUpdate = (data) => {
-                // data 包含 type: 'update'
-                const anchor = mindarController.getAnchor(0); // 取得第一個圖
+                const anchor = mindarController.getAnchor(0);
                 
                 if (anchor && anchor.visible) {
                     const event = new CustomEvent('mindar-update', {
@@ -86,7 +90,7 @@
     }
 
     // 執行
-    // 建議：如果是 iOS，最好做一個按鈕讓使用者點擊後才呼叫 startAR()
+    // 為了相容性，建議加一個按鈕讓使用者點擊，目前先自動執行測試
     startAR();
   });
 </script>
