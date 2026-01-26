@@ -1,96 +1,183 @@
-<div id="mindar-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;">
-    <video id="mindar-video" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
 
-<div id="GameDiv" cc_exact_fit_screen="true">
-    <div id="Cocos3dGameContainer">
-      <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
-    </div>
-</div>
+  <title>Cocos Creator | 2026_tibe</title>
 
-<script type="module">
-  import { Controller } from 'https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image.prod.js';
+  <meta name="viewport"
+        content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1,minimal-ui=true"/>
 
-  window.addEventListener('load', () => {
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
 
-    const videoElement = document.getElementById('mindar-video');
-    
-    // 步驟 1: 開啟攝影機的函式
-    const startCamera = async () => {
-      // 請求後鏡頭權限
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { 
-          facingMode: 'environment' 
-        },
-        audio: false
-      });
+  <meta name="renderer" content="webkit"/>
+  <meta name="force-rendering" content="webkit"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="msapplication-tap-highlight" content="no">
 
-      videoElement.srcObject = stream;
-      
-      // 等待 metadata 載入，確保我們能拿到 videoWidth/videoHeight
-      return new Promise((resolve) => {
-        videoElement.onloadedmetadata = () => {
-          videoElement.play();
-          resolve(videoElement);
-        };
-      });
-    };
+  <meta name="full-screen" content="yes"/>
+  <meta name="x5-fullscreen" content="true"/>
+  <meta name="360-fullscreen" content="true"/>
 
-    // 步驟 2: 主啟動流程
-    const startAR = async () => {
-        try {
-            console.log("正在開啟攝影機...");
-            await startCamera(); 
-            
-            // ★ 關鍵修正：拿到攝影機尺寸後，才初始化 Controller
-            const { videoWidth, videoHeight } = videoElement;
-            console.log(`攝影機尺寸: ${videoWidth}x${videoHeight}`);
+  <meta name="x5-page-mode" content="app">
 
-            const mindarController = new Controller({
-                inputWidth: videoWidth,
-                inputHeight: videoHeight,
-                maxTrack: 1, 
-                // 減少抖動參數
-                filterMinCF: 0.0001, 
-                filterBeta: 0.001,
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+
+  <style>
+    body, html {
+      background-color: transparent !important;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #GameDiv, #Cocos3dGameContainer {
+      background-color: transparent !important;
+    }
+    /* 啟動按鈕樣式 */
+    #ar-start-btn {
+        position: fixed;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        padding: 10px 20px;
+        background-color: #ff3b30;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        cursor: pointer;
+    }
+  </style>
+
+</head>
+<body>
+
+  <div id="mindar-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;">
+      <video id="mindar-video" autoplay muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>
+  </div>
+
+  <button id="ar-start-btn">Start AR</button>
+
+  <div id="GameDiv" cc_exact_fit_screen="true">
+      <div id="Cocos3dGameContainer">
+        <canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="99"></canvas>
+      </div>
+  </div>
+
+  <script type="module">
+    import { Controller } from 'https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image.prod.js';
+
+    window.addEventListener('load', () => {
+        const startBtn = document.getElementById('ar-start-btn');
+        const videoElement = document.getElementById('mindar-video');
+        let isStarted = false;
+
+        // 手動開啟攝影機
+        const startCamera = async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment' },
+                audio: false
             });
 
-            // ★ 步驟 3: 手動載入識別圖並等待完成
-            console.log("正在載入識別圖...");
-            const { dimensions } = await mindarController.addImageTargets('./targets.mind');
-            console.log("識別圖載入完成", dimensions);
+            videoElement.srcObject = stream;
+            
+            return new Promise((resolve) => {
+                videoElement.onloadedmetadata = () => {
+                    videoElement.play();
+                    resolve();
+                };
+            });
+        };
 
-            // ★ 步驟 4: 開始處理影像
-            console.log("開始 AR 運算...");
-            await mindarController.processVideo(videoElement);
+        // AR 主邏輯
+        const startAR = async () => {
+            if (isStarted) return;
+            isStarted = true;
+            startBtn.innerText = "Loading...";
 
-            // 監聽更新
-            mindarController.onUpdate = (data) => {
-                const anchor = mindarController.getAnchor(0);
+            try {
+                // 1. 先開鏡頭，確保拿到正確的寬高
+                await startCamera();
+                const { videoWidth, videoHeight } = videoElement;
+                console.log(`[MindAR] Camera Ready: ${videoWidth}x${videoHeight}`);
+
+                // 2. 初始化 Controller (傳入正確的尺寸)
+                const mindarController = new Controller({
+                    inputWidth: videoWidth,
+                    inputHeight: videoHeight,
+                    maxTrack: 1, 
+                    filterMinCF: 0.0001, // 濾波參數：減少抖動
+                    filterBeta: 0.001,
+                });
+
+                // 3. 載入識別圖
+                console.log("[MindAR] Loading targets...");
+                await mindarController.addImageTargets('./targets.mind'); // ★ 請確保檔案在這裡
+                console.log("[MindAR] Targets loaded");
+
+                // 4. 開始運算
+                await mindarController.processVideo(videoElement);
                 
-                if (anchor && anchor.visible) {
+                // 隱藏按鈕
+                startBtn.style.display = 'none';
+
+                // 5. 每一幀更新 Loop
+                mindarController.onUpdate = (data) => {
+                    // Raw Controller 的 data 結構： { type: 'update', results: [ {targetIndex, matrix}, ... ] }
+                    let foundMatrix = null;
+
+                    if (data.results && data.results.length > 0) {
+                        // 找第一張圖 (Index 0)
+                        const match = data.results.find(r => r.targetIndex === 0);
+                        if (match) {
+                            foundMatrix = match.matrix;
+                        }
+                    }
+
+                    // 發送事件給 Cocos
                     const event = new CustomEvent('mindar-update', {
                         detail: {
-                            visible: true,
-                            matrix: anchor.matrix
+                            visible: !!foundMatrix,
+                            matrix: foundMatrix
                         }
                     });
                     window.dispatchEvent(event);
-                } else {
-                    const event = new CustomEvent('mindar-update', {
-                        detail: { visible: false }
-                    });
-                    window.dispatchEvent(event);
-                }
-            };
+                };
 
-        } catch (error) {
-            console.error("MindAR 啟動失敗:", error);
-        }
-    }
+            } catch (error) {
+                console.error("[MindAR] Error:", error);
+                startBtn.innerText = "Error (See Console)";
+                alert("AR 啟動失敗，請檢查 HTTPS 或攝影機權限");
+            }
+        };
 
-    // 執行
-    // 為了相容性，建議加一個按鈕讓使用者點擊，目前先自動執行測試
-    startAR();
-  });
+        // 綁定按鈕點擊事件 (解決 iOS 禁止自動播放問題)
+        startBtn.addEventListener('click', startAR);
+    });
+  </script>
+
+  
+
+<!-- Polyfills bundle. -->
+
+<script src="src/polyfills.bundle.js" charset="utf-8"> </script>
+
+
+<!-- SystemJS support. -->
+<script src="src/system.bundle.js" charset="utf-8"> </script>
+
+<!-- Import map -->
+<script src="src/import-map.json" type="systemjs-importmap" charset="utf-8"> </script>
+
+<script>
+    System.import('./index.js').catch(function(err) { console.error(err); })
 </script>
+
+</body>
+</html>
